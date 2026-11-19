@@ -164,6 +164,7 @@ function flyToBag(src) {
 function addToCart(p, q = 1, opt = "", req = false, ol = "", vid = p.vid) {
   const key = p.id + "|" + opt, line = cart.find((l) => lineKey(l) === key);
   line ? (line.q += q) : cart.push({ ...slim(p), q, opt, req, ol, vid });
+  lastAdded = key;
   saveCart();
   toast(`Added to your bag: ${p.n}${opt ? " · " + opt : ""}`, "View bag", () => openDrawer("cart"));
   const b = $("#bag-btn"); b?.classList.remove("bump"); void b?.offsetWidth; b?.classList.add("bump");
@@ -186,13 +187,14 @@ function rememberSeen(p) {
 }
 
 /* ---------- drawer ---------- */
+let lastAdded = "";
 let drawerMode = "cart", fulfil = store.get("cv_fulfil", "collect");
 if (fulfil === "waves" && !CONFIG.partnerName) fulfil = "collect";
 function openDrawer(mode) { drawerMode = mode; renderDrawer(); $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); document.body.classList.add("lock"); $("#drawer .x").focus(); }
 function closeDrawer() { $("#drawer").classList.remove("on"); $("#scrim").classList.remove("on"); document.body.classList.remove("lock"); }
-function lineHtml(l, fav) {
+function lineHtml(l, fav, i = 0) {
   const th = l.t ? `<img src="${esc(l.t)}" alt="" loading="lazy">` : `<div class="noimg"><img src="assets/img/logo-sm.webp" alt=""></div>`;
-  return `<div class="li"><a class="th" href="product.html?id=${l.id}">${th}</a>
+  return `<div class="li${!fav && lineKey(l) === lastAdded ? " just" : ""}" style="--i:${i}"><a class="th" href="product.html?id=${l.id}">${th}</a>
     <div><b><a href="product.html?id=${l.id}">${esc(l.n)}</a></b>${!fav && l.opt ? `<span class="optl${l.req ? " req" : ""}">${esc(optText(l))}</span>` : ""}<span class="sub">${l.p ? R(l.p) + (fav ? "" : " each") : "Ask for price"}</span>
     ${fav ? `<div><button class="btn btn-sm btn-white" data-add="${l.id}" style="margin-top:8px">Add to bag</button><button class="rm" data-unfav="${l.id}">Remove</button></div>`
       : `<div><span class="qty"><button data-dec="${esc(lineKey(l))}" aria-label="One less">−</button><span>${l.q}</span><button data-inc="${esc(lineKey(l))}" aria-label="One more">+</button></span><button class="rm" data-rm="${esc(lineKey(l))}">Remove</button></div>`}</div>
@@ -208,9 +210,10 @@ function renderDrawer() {
   }
   $(".dh h3", d).textContent = "Your bag";
   const total = cart.reduce((s, l) => s + l.p * l.q, 0);
-  $(".db", d).innerHTML = cart.length ? cart.map((l) => lineHtml(l)).join("")
+  $(".db", d).innerHTML = cart.length ? cart.map((l, i) => lineHtml(l, false, i)).join("")
     : `<div class="empty">${I.bag.replace("<svg", '<svg width="48" height="48"')}<b>Your bag is empty</b><span>Have a look around the shop.</span><a class="btn btn-red btn-sm" href="shop.html">Browse the shop</a></div>`;
   $(".df", d).hidden = !cart.length;
+  setTimeout(() => (lastAdded = ""), 1500);
   const pay = $("#d-pay");
   if (pay) { pay.hidden = !cart.length || cart.some((l) => !l.vid) || fulfil === "waves"; pay.href = checkoutUrl(cart); }
   $("#d-total").textContent = R(total);

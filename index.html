@@ -87,8 +87,8 @@
   <div class="wrap vhero-in">
     <div>
       <span class="livechip fade"><i class="dot" id="live-dot"></i><span id="live-txt">8 stores across South Africa</span></span>
-      <h1><span class="w"><span>Genuine</span></span> <span class="w"><span>vapes.</span></span> <span class="l2"><span class="w"><span class="lava-txt">No</span></span> <span class="w"><span class="lava-txt">clones.</span></span></span></h1>
-      <p class="lead fade d1">Disposables, pod kits, nic salts and e-liquids from <b>eight Volcano Vapes stores</b> in five provinces, and delivered anywhere in South Africa. <b>Free delivery on orders over R1,500.</b></p>
+      <h1><span class="w"><span>Hot</span></span> <span class="w"><span>drops.</span></span> <span class="l2"><span class="w"><span class="lava-txt">Big</span></span> <span class="w"><span class="lava-txt">clouds.</span></span></span></h1>
+      <p class="lead fade d1">The latest disposables, pod kits, nic salts and juices, 100% genuine, from <b>eight Volcano Vapes stores</b> in five provinces. Or delivered anywhere in South Africa, <b>free over R1,500.</b></p>
       <div class="ctas fade d2">
         <a class="btn btn-red" href="shop.html">Shop now <span data-i="arrow"></span></a>
         <a class="btn btn-line" href="#stores">Find your nearest store</a>
@@ -187,6 +187,24 @@
         <div class="picked" id="picked"></div>
       </div>
       <div id="quiz" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" id="spin">
+  <div class="wrap">
+    <div class="spinbox rv">
+      <div class="spin-side">
+        <span class="tag">Can't decide?</span>
+        <h2>Spin the <span class="script">volcano</span></h2>
+        <p>Pick a type, hit spin and let the volcano choose your next flavour from what's in stock.</p>
+        <div class="sf-bar" id="spin-cats"></div>
+        <button class="btn btn-red" id="spin-go">Spin it <span data-i="arrow"></span></button>
+      </div>
+      <div class="reel-wrap">
+        <div class="reel" id="reel"><div class="reel-win" id="reel-win"><img src="assets/img/logo-sm.webp" alt="" width="180" height="83"><b>Ready when you are</b><small></small></div></div>
+        <div class="reel-res" id="reel-res" aria-live="polite"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -301,14 +319,32 @@ $("#ticker").innerHTML = ["Nasty", "Elfbar", "Vaporesso", "OXVA", "Geekvape", "V
   let W, H, parts = [], run = true, mouse = { x: -999, y: -999 };
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const size = () => { W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); };
-  const spawn = (y) => ({ x: W * (.15 + Math.random() * .7), y: y ?? H + 10, r: .6 + Math.random() * 1.8, vy: .35 + Math.random() * 1.1, vx: (Math.random() - .5) * .4, life: 0, max: 280 + Math.random() * 380, hue: 10 + Math.random() * 35 });
+  const spawn = (y) => ({ x: W * (.15 + Math.random() * .7), y: y ?? H + 10, r: .6 + Math.random() * 1.8, vy: .35 + Math.random() * 1.1, vx: (Math.random() - .5) * .4, life: 0, max: 280 + Math.random() * 380, hue: 10 + Math.random() * 35, g: 0 });
+  const smoke = [], burst = [];
   size(); addEventListener("resize", size);
   const N = innerWidth < 700 ? 28 : 60;
   for (let i = 0; i < N; i++) { const p = spawn(Math.random() * H); p.life = Math.random() * p.max; parts.push(p); }
-  cv.parentElement.addEventListener("pointermove", (e) => { const r = cv.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; }, { passive: true });
+  cv.parentElement.addEventListener("pointermove", (e) => {
+    const r = cv.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top };
+    if (smoke.length < 70 && e.pointerType === "mouse") smoke.push({ x: mouse.x, y: mouse.y, r: 8, vx: (Math.random() - .5) * .6, vy: .4 + Math.random() * .5, life: 0, max: 70 + Math.random() * 40 }); // vapour trail
+  }, { passive: true });
+  // tap the logo: it erupts
+  const erupt = () => {
+    const m = $(".logo-big").getBoundingClientRect(), r = cv.getBoundingClientRect(), x = m.left + m.width / 2 - r.left, y = m.top + m.height * .25 - r.top;
+    for (let i = 0; i < 90; i++) burst.push({ x, y, r: 1 + Math.random() * 2.2, vx: (Math.random() - .5) * 7, vy: 3 + Math.random() * 7, g: .14, life: 0, max: 90 + Math.random() * 60, hue: 8 + Math.random() * 40 });
+    $(".mountain").classList.remove("boom"); void $(".mountain").offsetWidth; $(".mountain").classList.add("boom");
+    if (!run || reduced) { run = true; requestAnimationFrame(tick); }
+  };
+  $(".mountain").addEventListener("click", erupt);
   function draw() {
-    cx.clearRect(0, 0, W, H); cx.globalCompositeOperation = "lighter";
-    for (const p of parts) {
+    cx.clearRect(0, 0, W, H); cx.globalCompositeOperation = "source-over";
+    for (const s of smoke) {
+      const a = .16 * (1 - s.life / s.max), g = cx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r);
+      g.addColorStop(0, `rgba(235,225,220,${a})`); g.addColorStop(1, "rgba(235,225,220,0)");
+      cx.fillStyle = g; cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, 7); cx.fill();
+    }
+    cx.globalCompositeOperation = "lighter";
+    for (const p of parts.concat(burst)) {
       const a = Math.sin(Math.PI * p.life / p.max);
       const g = cx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
       g.addColorStop(0, `hsla(${p.hue},100%,62%,${a * .75})`); g.addColorStop(1, `hsla(${p.hue},100%,50%,0)`);
@@ -323,6 +359,9 @@ $("#ticker").innerHTML = ["Nasty", "Elfbar", "Vaporesso", "OXVA", "Geekvape", "V
       p.x += p.vx + Math.sin((p.life + p.hue) / 40) * .3; p.y -= p.vy; p.life++;
       if (p.life > p.max || p.y < -20) Object.assign(p, spawn());
     }
+    for (const s of smoke) { s.x += s.vx; s.y -= s.vy; s.r += .9; s.life++; }
+    for (const b of burst) { b.x += b.vx; b.y -= b.vy; b.vy -= b.g; b.vx *= .985; b.life++; }
+    for (const list of [smoke, burst]) for (let i = list.length - 1; i >= 0; i--) if (list[i].life > list[i].max) list.splice(i, 1);
     draw(); requestAnimationFrame(tick);
   }
   if (reduced) return draw();
@@ -464,6 +503,30 @@ function drawQuiz() {
   $("#qre").onclick = () => { ans = {}; step = 0; drawQuiz(); };
 }
 drawQuiz();
+
+/* ---------- spin the volcano: a flavour roulette over real stock ---------- */
+const SPIN = [["Disposables", "Disposables"], ["Prefilled Pods", "Prefilled pods"], ["Nic Salts", "Nic salts"], ["E Liquids", "E-liquids"], ["Snus", "Pouches"]];
+let spinCat = SPIN[0][0], spinning = false;
+$("#spin-cats").innerHTML = SPIN.map(([v, l]) => `<button class="chip" data-sc="${v}" aria-pressed="${v === spinCat}">${l}</button>`).join("");
+$("#spin-cats").onclick = (e) => { const b = e.target.closest("[data-sc]"); if (!b) return; spinCat = b.dataset.sc; $$("#spin-cats .chip").forEach((x) => x.setAttribute("aria-pressed", x === b)); };
+$("#spin-go").onclick = async () => {
+  if (spinning) return;
+  const all = await loadProducts(), pool = all.filter((p) => p.s === spinCat && p.t && p.p);
+  if (!pool.length) return toast("Nothing in stock there right now. Try another type.");
+  spinning = true; $("#spin-go").disabled = true; $("#reel-res").innerHTML = ""; $("#reel").classList.remove("won");
+  const win = $("#reel-win"), pick = pool[Math.floor(Math.random() * pool.length)];
+  const show = (p) => { win.innerHTML = `<img src="${esc(p.t)}" alt=""><b>${esc(p.n)}</b><small>${esc(p.b || "")}</small>`; win.classList.remove("tick"); void win.offsetWidth; win.classList.add("tick"); };
+  // slows down like a real reel, then lands
+  let delay = reduced ? 0 : 55;
+  while (delay && delay < 420) { show(pool[Math.floor(Math.random() * pool.length)]); await new Promise((r) => setTimeout(r, delay)); delay *= 1.13; }
+  show(pick); $("#reel").classList.add("won");
+  const det = await loadDetail(pick.id), v = det.v && det.v.length ? det.v[Math.floor(Math.random() * det.v.length)] : null;
+  const price = v ? v[2] : pick.p;
+  $("#reel-res").innerHTML = `<p>${v ? `The volcano says <b>${esc(v[1])}</b>` : "The volcano has spoken"} · <b>${R(price)}</b></p>
+    <div class="ctas"><button class="btn btn-red btn-sm" id="spin-add">${I.bag} Add to bag</button><a class="btn btn-line btn-sm" href="${productUrl(pick)}">View it</a></div>`;
+  $("#spin-add").onclick = () => { flyToBag($("#reel-win img")); addToCart({ ...pick, p: price }, 1, v ? v[1] : "", false, det.o, v ? v[0] : pick.vid); };
+  spinning = false; $("#spin-go").disabled = false; $("#spin-go").firstChild.textContent = "Spin again ";
+};
 
 loadProducts().then((all) => {
   ALL = all;
