@@ -531,7 +531,12 @@ document.addEventListener("click", async (e) => {
   if (!e.target.closest("[data-install]") || !installEvt) return;
   installEvt.prompt(); await installEvt.userChoice; installEvt = null; $$("[data-install]").forEach((b) => (b.hidden = true));
 });
-if ("serviceWorker" in navigator && location.protocol === "https:") addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then((r) => r.update()).catch(() => {}));
+  // a new version took over: reload once so the visitor sees it straight away
+  let had = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (had) location.reload(); had = true; });
+}
 
 chromeTop();
 document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); pointerFx(); $$(".hsearch").forEach(liveSearch); myStoreChip(); setInterval(myStoreChip, 60000); });
