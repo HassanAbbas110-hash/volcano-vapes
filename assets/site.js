@@ -7,7 +7,7 @@ const CONFIG = {
   address: ["74-70 Oak Ave", "Primrose (Oak Ave)", "Germiston, 1401"],
   mapsQuery: "Volcano Vapes, 74-70 Oak Ave, Primrose, Germiston 1401",
   hoursNote: "Mon\u2013Sat 08:00\u201320:00 \u00b7 Sun 09:00\u201318:00", // TODO: confirm exact trading hours with the shop
-  onlineStore: "",
+  onlineStore: "https://volcanovapes.co.za",
   instagram: "https://www.instagram.com/volcanovapes_south_africa/",  // TODO: paste the shop's Instagram profile link
   facebook: "https://www.facebook.com/p/Volcano-Vapes-South-Africa-100090631302227/",   // TODO: paste the shop's Facebook page link
   partnerName: "7Waves", // delivery partner shown as a 3rd way to get an order; "" hides every partner card, button and sentence
@@ -106,7 +106,9 @@ const FLAVOURS = {
   tobacco: { label: "Tobacco & classic", re: /(tobacco|cuban|virginia|classic|rich tob|double apple)/i }
 };
 const productUrl = (p) => `product.html?id=${p.id}`;
-const buyOnlineUrl = (p, q = 1) => `${CONFIG.onlineStore}/?add-to-cart=${p.id}&quantity=${q}`;
+// Shopify cart link: drops the items in their cart and opens checkout
+const buyOnlineUrl = (p, q = 1, vid = p.vid) => `${CONFIG.onlineStore}/cart/${vid}:${q}`;
+const checkoutUrl = (lines) => `${CONFIG.onlineStore}/cart/${lines.map((l) => `${l.vid}:${l.q}`).join(",")}`;
 const priceHtml = (p) => p.p ? `<span class="price"><small>${p.var ? "from" : ""}</small>${R(p.p)}</span>` : `<span class="price ask">Ask for price</span>`;
 const imgHtml = (p, big) => {
   const src = big ? (p.i || p.t) : p.t;
@@ -122,7 +124,7 @@ function cardHtml(p, i = 0) {
     <div class="bd"><span class="br">${esc(p.b || p.s)}</span><p class="nm"><a href="${productUrl(p)}">${esc(p.n)}</a></p>
       <div class="ft">${priceHtml(p)}${p.p ? `<button class="add" data-add="${p.id}" aria-label="Add ${esc(p.n)} to bag">${I.plus}</button>` : ""}</div></div></article>`;
 }
-const slim = (p) => ({ id: p.id, n: p.n, p: p.p, t: p.t, u: p.u, b: p.b, s: p.s, c: p.c, mg: p.mg, var: p.var });
+const slim = (p) => ({ id: p.id, n: p.n, p: p.p, t: p.t, u: p.u, b: p.b, s: p.s, c: p.c, mg: p.mg, var: p.var, vid: p.vid });
 
 /* ---------- nicotine pouches: pick a strength before adding ---------- */
 const POUCH_TIERS = [["3mg", "Light"], ["6mg", "Regular"], ["10mg", "Strong"]];
@@ -136,10 +138,10 @@ function pouchOpts(p) {
   return opts;
 }
 const lineKey = (l) => l.id + "|" + (l.opt || "");
-const optText = (l) => l.opt ? `Strength: ${l.opt}${l.req ? " (on request)" : ""}` : "";
+const optText = (l) => l.opt ? `${l.ol || "Strength"}: ${l.opt}${l.req ? " (on request)" : ""}` : "";
 
 /* ---------- cart + favourites ---------- */
-let cart = store.get("cv_cart", []);
+let cart = store.get("cv_cart", []).filter((l) => l.vid);
 let favs = store.get("cv_favs", []);
 const isFav = (id) => favs.some((f) => f.id === id);
 function saveCart() { store.set("cv_cart", cart); renderCounts(); if ($("#drawer")?.classList.contains("on") && drawerMode === "cart") renderDrawer(); }
@@ -159,9 +161,9 @@ function flyToBag(src) {
     { transform: `translate(${dx}px,${dy}px) scale(.08) rotate(-25deg)`, opacity: .4 }
   ], { duration: 750, easing: "cubic-bezier(.5,0,.3,1)" }).onfinish = () => g.remove();
 }
-function addToCart(p, q = 1, opt = "", req = false) {
+function addToCart(p, q = 1, opt = "", req = false, ol = "", vid = p.vid) {
   const key = p.id + "|" + opt, line = cart.find((l) => lineKey(l) === key);
-  line ? (line.q += q) : cart.push({ ...slim(p), q, opt, req });
+  line ? (line.q += q) : cart.push({ ...slim(p), q, opt, req, ol, vid });
   saveCart();
   toast(`Added to your bag: ${p.n}${opt ? " · " + opt : ""}`, "View bag", () => openDrawer("cart"));
   const b = $("#bag-btn"); b?.classList.remove("bump"); void b?.offsetWidth; b?.classList.add("bump");
@@ -209,6 +211,8 @@ function renderDrawer() {
   $(".db", d).innerHTML = cart.length ? cart.map((l) => lineHtml(l)).join("")
     : `<div class="empty">${I.bag.replace("<svg", '<svg width="48" height="48"')}<b>Your bag is empty</b><span>Have a look around the shop.</span><a class="btn btn-red btn-sm" href="shop.html">Browse the shop</a></div>`;
   $(".df", d).hidden = !cart.length;
+  const pay = $("#d-pay");
+  if (pay) { pay.hidden = !cart.length || cart.some((l) => !l.vid) || fulfil === "waves"; pay.href = checkoutUrl(cart); }
   $("#d-total").textContent = R(total);
   $$("#d-mode button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.m === fulfil));
   $("#d-addr-wrap").hidden = fulfil !== "deliver";
@@ -228,7 +232,7 @@ function sendOrder() {
   const lines = cart.map((l) => `• ${l.q} x ${l.n}${l.opt ? ` [${optText(l)}]` : ""} (${R(l.p * l.q)})`).join("\n");
   const asks = cart.some((l) => l.req) ? "\n\nPlease confirm the strengths marked \"on request\"." : "";
   const msg = `Hi Volcano, I'd like to order:\n\n${lines}\n\nTotal: ${R(total)}\n${fulfil === "deliver" ? `Courier to: ${addr.value.trim()}` : `I'll collect at Volcano Vapes ${(STORES.find((x) => x.id === $("#d-store").value) || STORES[0]).name}`}\nName: ${name.value.trim()}${$("#d-note").value.trim() ? "\nNote: " + $("#d-note").value.trim() : ""}${asks}`;
-  store.set("cv_name", name.value.trim()); store.set("cv_store", $("#d-store").value);
+  store.set("cv_name", name.value.trim()); store.set("cv_store", $("#d-store").value); saveLastOrder(); myStoreChip();
   window.open(wa(msg), "_blank", "noopener");
 }
 
@@ -250,7 +254,7 @@ function chromeTop() {
   document.body.insertAdjacentHTML("afterbegin", `
   <a class="sr" href="#main">Skip to content</a>
   <div class="progress" aria-hidden="true"></div>
-  <div class="strip"><div class="wrap"><span>Free delivery on orders over R1,500</span><span>8 stores · Gauteng, North West, Mpumalanga, KZN &amp; Eastern Cape</span><span>100% genuine, no clones · Strictly 18+</span></div></div>
+  <div class="strip"><div class="wrap"><span>Free delivery on orders over R1,500</span><span id="mystore"></span><span>100% genuine, no clones · Strictly 18+</span></div></div>
   <header class="hdr"><div class="wrap hdr-in">
     <a class="logo" href="index.html" aria-label="Volcano Vapes home"><img src="assets/img/logo-sm.webp" alt="Volcano Vapes" width="180" height="83"></a>
     <nav class="nav" aria-label="Main">${navLinks}</nav>
@@ -278,6 +282,7 @@ function chromeBottom() {
       <div><h4>Talk to us</h4><ul><li><a href="tel:${CONFIG.phone.replace(/\s/g, "")}">${CONFIG.phone}</a></li><li><a href="${wa("Hi Volcano!")}" target="_blank" rel="noopener">WhatsApp us</a></li><li><a href="mailto:${CONFIG.email}">${CONFIG.email}</a></li><li><a href="${mapsLink}" target="_blank" rel="noopener">${CONFIG.address[0]}, ${CONFIG.address[2]}</a></li></ul></div>
     </div>
     <p class="warn">WARNING: This product contains nicotine. Nicotine is an addictive chemical. Not for sale to persons under the age of 18.</p>
+    <button class="btn btn-line btn-sm" data-install hidden style="margin-top:18px">${I.bag} Add Volcano to your home screen</button>
     <div class="copy"><span>© ${new Date().getFullYear()} Volcano Vapes · Head office: 17 Theodore Street, Delville, Germiston</span><span>Prices and stock change daily. Confirmed when you order.</span></div>
   </div></footer>
   <a class="wa-float" href="${wa("Hi Volcano!")}" target="_blank" rel="noopener" aria-label="Chat to us on WhatsApp">${I.wa}</a>
@@ -295,12 +300,13 @@ function chromeBottom() {
       <div class="field" id="d-addr-wrap" hidden><label for="d-addr">Delivery address</label><input id="d-addr" autocomplete="street-address" placeholder="Street, suburb, city"></div>
       <div class="field pickup"><label for="d-note">Anything else? (optional)</label><textarea id="d-note" rows="2" placeholder="Flavour swaps, best time to collect…"></textarea></div>
       <div class="tot"><span class="muted">Total</span><strong id="d-total">R0</strong></div>
+      ${CONFIG.onlineStore ? `<a class="btn btn-red" id="d-pay" target="_blank" rel="noopener">${I.bag} Pay online now</a>` : ""}
       <button class="btn btn-wa pickup" id="d-send">${I.wa} Send order on WhatsApp</button>
-      <p class="fine pickup">We check stock and confirm delivery costs and payment with you on WhatsApp before anything is charged. ID required on collection and delivery.</p>
+      <p class="fine pickup">Pay online through our secure checkout (card, EFT, Capitec Pay, Payflex and more), or send it on WhatsApp and we'll confirm everything before you pay. ID required on collection and delivery.</p>
     </div></div>
   <div class="pick" id="pick" role="dialog" aria-modal="true" aria-labelledby="pick-h" hidden><div class="pick-in">
     <button class="x" data-pclose aria-label="Close">${I.x}</button>
-    <span class="tag">Nicotine pouches</span><h3 id="pick-h">Choose your strength</h3><p class="pick-n" id="pick-n"></p>
+    <span class="tag">Options</span><h3 id="pick-h">Choose your flavour</h3><p class="pick-n" id="pick-n"></p>
     <div class="pick-opts" id="pick-opts" role="radiogroup" aria-label="Strength"></div>
     <p class="pick-note" id="pick-note">Pick a strength to continue.</p>
     <button class="btn btn-red" id="pick-go" disabled>${I.bag} Add to bag</button></div></div>
@@ -335,7 +341,7 @@ function gate() {
 
 /* ---------- global events ---------- */
 document.addEventListener("click", async (e) => {
-  const t = e.target.closest("[data-add],[data-fav],[data-unfav],[data-inc],[data-dec],[data-rm],[data-close],#bag-btn,#fav-btn,#burger,#mnav-x,#d-send,#d-copy,#d-mode button,#scrim,.stars button");
+  const t = e.target.closest("[data-add],[data-fav],[data-unfav],[data-inc],[data-dec],[data-rm],[data-close],#bag-btn,#fav-btn,#burger,#mnav-x,#d-send,#d-pay,#d-copy,#d-mode button,#scrim,.stars button");
   if (!t) return;
   if (t.dataset.add) {
     e.preventDefault();
@@ -343,7 +349,7 @@ document.addEventListener("click", async (e) => {
     if (!p) return;
     const qtyEl = t.dataset.qty ? $(t.dataset.qty) : null, q = qtyEl ? Math.max(1, +qtyEl.value || 1) : 1;
     const img = (t.closest(".card,.pd,.li,.res,.fitc") || document).querySelector(".ph > img, .pic > img, .th img");
-    if (isPouch(p)) { openPick(p, q, img); return; }
+    if (p.var) { openPick(p, q, img); return; }
     flyToBag(img);
     addToCart(p, q);
     if (t.classList.contains("add")) { t.classList.add("ok"); t.innerHTML = I.check; setTimeout(() => { t.classList.remove("ok"); t.innerHTML = I.plus; }, 1200); }
@@ -357,6 +363,7 @@ document.addEventListener("click", async (e) => {
   else if (t.id === "burger") $("#mnav").classList.add("on");
   else if (t.id === "mnav-x") $("#mnav").classList.remove("on");
   else if (t.id === "d-send") sendOrder();
+  else if (t.id === "d-pay") saveLastOrder();
   else if (t.id === "d-copy") {
     const txt = cart.map((l) => `${l.q} x ${l.n}${l.opt ? " (" + l.opt + ")" : ""}`).join("\n");
     try { await navigator.clipboard.writeText(txt); toast("Your list is copied. Paste it into 7Waves."); } catch { toast("Couldn't copy. Long-press the items to copy them instead."); }
@@ -369,23 +376,28 @@ document.addEventListener("input", (e) => e.target.classList?.remove("bad"));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closePick(); $("#mnav")?.classList.remove("on"); } });
 
 let pickState = null;
-function openPick(p, q, img) {
-  pickState = { p, q, img, opt: null };
-  $("#pick-n").textContent = p.n + (q > 1 ? ` · ${q} cans` : "");
-  $("#pick-opts").innerHTML = pouchOpts(p).map((o, i) => `<button class="popt" role="radio" aria-checked="false" data-pi="${i}"><b>${esc(o.v)}</b><span>${esc(o.label)}</span><em class="${o.stock ? "in" : "rq"}">${o.stock ? "In stock" : "On request"}</em></button>`).join("");
-  $("#pick-go").disabled = true; $("#pick-note").textContent = "Pick a strength to continue.";
+async function openPick(p, q, img) {
+  const det = await loadDetail(p.id), ol = det.o || "Option";
+  const opts = (det.v || []).map(([vid, v, price]) => ({ vid, v, price, label: R(price), stock: true }));
+  if (!opts.length) { flyToBag(img); addToCart(p, q); return; }
+  pickState = { p, q, img, opt: null, opts, ol };
+  $("#pick .tag").textContent = p.b || p.s;
+  $("#pick-h").textContent = `Choose your ${ol.toLowerCase()}`;
+  $("#pick-n").textContent = p.n + (q > 1 ? ` · ${q}` : "");
+  $("#pick-opts").innerHTML = opts.map((o, i) => `<button class="popt" role="radio" aria-checked="false" data-pi="${i}"><b>${esc(o.v)}</b><em class="in">${o.label}</em></button>`).join("");
+  $("#pick-go").disabled = true; $("#pick-note").textContent = `${opts.length} in stock. Pick one to continue.`;
   $("#pick").hidden = false; document.body.classList.add("lock"); $("#pick-opts .popt")?.focus();
 }
 function closePick() { if ($("#pick") && !$("#pick").hidden) { $("#pick").hidden = true; if (!$("#drawer").classList.contains("on")) document.body.classList.remove("lock"); } }
 document.addEventListener("click", (e) => {
   const o = e.target.closest("#pick .popt");
   if (o && pickState) {
-    pickState.opt = pouchOpts(pickState.p)[+o.dataset.pi];
+    pickState.opt = pickState.opts[+o.dataset.pi];
     $$("#pick .popt").forEach((b) => b.setAttribute("aria-checked", b === o));
     $("#pick-go").disabled = false;
-    $("#pick-note").textContent = pickState.opt.stock ? "This is the strength of the can in stock." : "Not this can's strength. We'll confirm we have it on WhatsApp before you pay.";
+    $("#pick-note").textContent = `${pickState.opt.v} · ${pickState.opt.label}`;
   } else if (e.target.closest("#pick-go") && pickState?.opt) {
-    const { p, q, img, opt } = pickState; closePick(); flyToBag(img); addToCart(p, q, opt.v, !opt.stock);
+    const { p, q, img, opt, ol } = pickState; closePick(); flyToBag(img); addToCart({ ...p, p: opt.price }, q, opt.v, false, ol, opt.vid);
   } else if (e.target.closest("[data-pclose]") || e.target.id === "pick") closePick();
 });
 
@@ -465,5 +477,58 @@ function reveal() {
   $$(".rv,.sec-head").forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); io.observe(el); });
 }
 
+/* ---------- instant search: results as you type, "/" to focus ---------- */
+function liveSearch(form) {
+  const input = $("input", form), box = document.createElement("div");
+  box.className = "sres"; box.hidden = true; box.setAttribute("role", "listbox"); form.appendChild(box);
+  let sel = -1;
+  const draw = async () => {
+    const q = input.value.trim().toLowerCase();
+    if (q.length < 2) { box.hidden = true; return; }
+    const all = await loadProducts(), words = q.split(/\s+/);
+    const hits = all.map((p) => { const hay = (p.n + " " + p.b + " " + p.s).toLowerCase(); return words.every((w) => hay.includes(w)) ? [p, (p.n.toLowerCase().startsWith(q) ? 3 : 0) + (p.b.toLowerCase().startsWith(words[0]) ? 2 : 0) + (p.new ? 1 : 0)] : null; })
+      .filter(Boolean).sort((a, b) => b[1] - a[1]).map((x) => x[0]);
+    sel = -1;
+    box.innerHTML = hits.length
+      ? hits.slice(0, 6).map((p) => `<a role="option" href="${productUrl(p)}">${p.t ? `<img src="${esc(p.t)}" alt="" loading="lazy">` : "<span></span>"}<span><b>${esc(p.n)}</b><small>${esc(p.b || p.s)}</small></span><em>${p.p ? (p.var ? "from " : "") + R(p.p) : ""}</em></a>`).join("") + `<a class="all" href="shop.html?q=${encodeURIComponent(input.value.trim())}">See all ${hits.length} results ${I.arrow}</a>`
+      : `<p>No match for "${esc(input.value.trim())}". <a class="link" href="${wa("Hi Volcano, do you have " + input.value.trim() + "?")}" target="_blank" rel="noopener">Ask us on WhatsApp</a></p>`;
+    box.hidden = false;
+  };
+  input.setAttribute("autocomplete", "off");
+  input.addEventListener("input", draw);
+  input.addEventListener("focus", draw);
+  input.addEventListener("keydown", (e) => {
+    const items = $$("a", box); if (box.hidden || !items.length) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sel = (sel + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length; items.forEach((a, i) => a.classList.toggle("on", i === sel)); }
+    else if (e.key === "Enter" && sel >= 0) { e.preventDefault(); location.href = items[sel].href; }
+    else if (e.key === "Escape") box.hidden = true;
+  });
+  document.addEventListener("click", (e) => { if (!form.contains(e.target)) box.hidden = true; });
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && !/input|textarea|select/i.test(document.activeElement.tagName)) { const i = $("#hq"); if (i && i.offsetParent) { e.preventDefault(); i.focus(); } }
+});
+
+/* ---------- my store: remembered store and its live status in the top strip ---------- */
+const myStore = () => STORES.find((s) => s.id === store.get("cv_store", "")) || null;
+function myStoreChip() {
+  const el = $("#mystore"), st = myStore(); if (!el) return;
+  if (!st) { el.innerHTML = `<a href="visit.html">8 stores · Find yours</a>`; return; }
+  const o = openState(st);
+  el.innerHTML = `<a href="visit.html?store=${st.id}"><i class="dot${o.open ? (o.soon ? " soon" : "") : " off"}"></i>Your store: <b>${st.name}</b> · ${o.text}</a>`;
+}
+
+/* ---------- order again ---------- */
+const saveLastOrder = () => store.set("cv_last", cart.map((l) => ({ ...l })));
+
+/* ---------- installable app ---------- */
+let installEvt = null;
+addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; $$("[data-install]").forEach((b) => (b.hidden = false)); });
+document.addEventListener("click", async (e) => {
+  if (!e.target.closest("[data-install]") || !installEvt) return;
+  installEvt.prompt(); await installEvt.userChoice; installEvt = null; $$("[data-install]").forEach((b) => (b.hidden = true));
+});
+if ("serviceWorker" in navigator && location.protocol === "https:") addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+
 chromeTop();
-document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); pointerFx(); });
+document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); pointerFx(); $$(".hsearch").forEach(liveSearch); myStoreChip(); setInterval(myStoreChip, 60000); });

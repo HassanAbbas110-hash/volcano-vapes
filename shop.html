@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shop · Volcano Vapes</title>
-<meta name="description" content="Everything in stock at Volcano Vapes: disposables, pod kits, e-liquids, nic salts, coils, pouches and snus. Filter by brand, flavour, puffs and price.">
+<meta name="description" content="Everything in stock at Volcano Vapes: disposables, pod kits, prefilled pods, nic salts, longfills, coils, pouches, snuff and cigars. Filter by brand, flavour, puffs and price.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/icon-512.png">
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
@@ -125,9 +127,9 @@ $("#wave-shop").href = waveLink();
 $("#side-x").innerHTML = I.x;
 
 const PAGE = 36;
-const SUBS = { vape: ["Disposables", "Devices", "Nic Salts", "E Liquids", "Coils, Pods & Tanks", "MTL", "Vape Accessories", "Batteries & Chargers", "Other"], snus: ["Snus"] };
-const MAIN = { vape: "Vape", snus: "Snus & pouches" };
-const SUBNAME = { "E Liquids": "E-liquids", "Nic Salts": "Nic salts", "Devices": "Pod kits & devices", "Hookah Flavour": "Shisha flavours", "Coal": "Coals" };
+const SUBS = { vape: ["Disposables", "Prefilled Pods", "Devices", "Nic Salts", "E Liquids", "Longfills & Shots", "Coils, Pods & Tanks", "Batteries & Chargers", "Vape Accessories"], snus: ["Snus", "Snuff"], tobacco: ["Cigars & Tobacco"] };
+const MAIN = { vape: "Vape", snus: "Pouches & snuff", tobacco: "Cigars & tobacco" };
+const SUBNAME = { "E Liquids": "E-liquids", "Nic Salts": "Nic salts", "Devices": "Pod kits & devices", "Snus": "Nicotine pouches", "Prefilled Pods": "Prefilled pods" };
 const PUFFS = [["u5", "Under 5k", 0, 4999], ["5-10", "5k–10k", 5000, 10000], ["10-20", "10k–20k", 10001, 20000], ["20", "20k+", 20001, 1e9]];
 // nicotine pouch strength buckets: mg from the name, or Zyn/Velo-style words
 const NS = [["light", "Light (up to 6mg)"], ["regular", "Regular (6–12mg)"], ["strong", "Strong (12–20mg)"], ["xstrong", "Extra strong (20mg+)"], ["other", "Caffeine & CBD"]];
@@ -183,7 +185,7 @@ function render(keepPage) {
   const forF = ALL.filter((p) => matches(p, "f"));
   $("#f-flav").innerHTML = Object.entries(FLAVOURS).map(([k, v]) => `<button data-flav="${k}" aria-pressed="${st.f === k}">${v.label} (${fmt(forF.filter((p) => v.re.test(p.n)).length)})</button>`).join("");
   // puffs only matters for disposables
-  $("#g-puffs").hidden = !(st.s === "Disposables" || (!st.s && st.c !== "hookah" && st.c !== "snus"));
+  $("#g-puffs").hidden = !(st.s === "Disposables" || (!st.s && st.c !== "tobacco" && st.c !== "snus"));
   $("#f-puffs").innerHTML = PUFFS.map(([k, l]) => `<button data-pf="${k}" aria-pressed="${st.pf === k}">${l}</button>`).join("");
   const snus = st.c === "snus";
   $("#g-ns").hidden = !snus;
@@ -191,7 +193,7 @@ function render(keepPage) {
     const forNs = ALL.filter((p) => matches(p, "ns"));
     $("#f-ns").innerHTML = NS.map(([k, l]) => `<button data-ns="${k}" aria-pressed="${st.ns === k}">${l} (${forNs.filter((p) => nsOf(p) === k).length})</button>`).join("");
     const sb = Object.entries(count(ALL.filter((p) => p.c === "snus"), (p) => p.b)).sort((a, b) => (b[0] === "ZYN SNUS") - (a[0] === "ZYN SNUS") || b[1] - a[1]);
-    $("#snusbar").innerHTML = `<span>Brands</span>` + sb.map(([b]) => `<button data-sb="${esc(b)}" aria-pressed="${st.b === b}">${esc(b.replace(/ snus$/i, ""))}</button>`).join("") + `<small>Pick your nicotine strength when you add a can to your bag: Light 3mg, Regular 6mg, Strong 10mg, or the can's own strength.</small>`;
+    $("#snusbar").innerHTML = `<span>Brands</span>` + sb.map(([b]) => `<button data-sb="${esc(b)}" aria-pressed="${st.b === b}">${esc(b.replace(/ snus$/i, ""))}</button>`).join("") + ``;
   }
   $("#snusbar").hidden = !snus;
   $("#f-price").innerHTML = PRICES.map(([a, b, l]) => `<button data-pr="${a}-${b}" aria-pressed="${st.min === a && st.max === b && (a || b)}">${l}</button>`).join("");

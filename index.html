@@ -8,6 +8,8 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0a0a0c">
 <link rel="icon" href="assets/img/icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/icon-512.png">
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/yellowtail-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -113,6 +115,8 @@
   </div>
   <span class="scrollcue" aria-hidden="true"></span>
 </section>
+
+<section class="wrap" id="again" hidden style="padding-top:28px"></section>
 
 <div class="ticker" aria-hidden="true"><div class="mq" id="ticker"></div></div>
 
@@ -283,7 +287,7 @@
 <script>
 $$("[data-i]").forEach((el) => (el.outerHTML = I[el.dataset.i]));
 $$("[data-ic]").forEach((el) => (el.innerHTML = I[el.dataset.ic]));
-$("#fitchips").innerHTML = ["XROS", "XLIM", "Nord 5", "Caliburn G2", "Drag X PnP", "Argus", "Aegis Boost", "Vinci 3"].map((d) => `<span>${d}</span>`).join("") + "<span>+57 more</span>";
+$("#fitchips").innerHTML = ["XROS", "XLIM", "Nord 5", "Caliburn G2", "Drag X PnP", "Argus", "Aegis Boost", "Vinci 3"].map((d) => `<span>${d}</span>`).join("") + "<span>and many more</span>";
 document.addEventListener("DOMContentLoaded", () => { const w = $("#wave-card"); if (w) w.href = waveLink(); const c = $("#wave-cta"); if (c) c.href = waveLink(); });
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
@@ -410,9 +414,9 @@ const TILES = [
   ["Nic salts", "s=Nic+Salts", (p) => p.s === "Nic Salts"],
   ["E-liquids", "s=E+Liquids", (p) => p.s === "E Liquids"],
   ["Coils & pods", "s=Coils%2C+Pods+%26+Tanks", (p) => p.s === "Coils, Pods & Tanks"],
-  ["MTL", "s=MTL", (p) => p.s === "MTL"],
-  ["Accessories", "s=Vape+Accessories", (p) => p.s === "Vape Accessories"],
-  ["Pouches & snus", "c=snus", (p) => p.c === "snus"]
+  ["Prefilled pods", "s=Prefilled+Pods", (p) => p.s === "Prefilled Pods"],
+  ["Longfills & shots", "s=Longfills+%26+Shots", (p) => p.s === "Longfills & Shots"],
+  ["Pouches & snuff", "c=snus", (p) => p.c === "snus"]
 ];
 const G = {
   disp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="7" y="6" width="10" height="16" rx="3"/><path d="M10 6V3h4v3"/><path d="M10 12h4"/></svg>',
@@ -428,7 +432,7 @@ const G = {
   r3: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12c0-3 4-3 6 0s6 3 6 0-4-3-6 0-6 3-6 0z"/></svg>'
 };
 const STEPS = [
-  { k: "kind", q: "What do you use?", o: [["Disposables", "disp", "Disposable", "Grab-and-go, no refills"], ["Nic Salts", "pod", "Pod kit", "Nic salts for pods"], ["E Liquids", "bottle", "Tank / mod", "Bigger clouds, bigger bottles"], ["MTL", "mtl", "Mouth-to-lung", "A tighter draw"]] },
+  { k: "kind", q: "What do you use?", o: [["Disposables", "disp", "Disposable", "Grab-and-go, no refills"], ["Nic Salts", "pod", "Pod kit", "Nic salts for pods"], ["E Liquids", "bottle", "Tank / mod", "Bigger clouds, bigger bottles"], ["Prefilled Pods", "mtl", "Pod-mod refills", "Click-in flavour pods"]] },
   { k: "flav", q: "Pick a flavour mood", o: [["ice", "ice", "Icy & minty", "That cold exhale"], ["fruit", "fruit", "Fruity", "Mango, berry, watermelon"], ["sweet", "sweet", "Sweet & dessert", "Candy, custard, soda"], ["tobacco", "tobacco", "Tobacco & classic", "Old-school and smooth"]] },
   { k: "max", q: "What's the budget?", o: [["150", "r1", "Under R150", "Easy on the pocket"], ["300", "r2", "Under R300", "The sweet spot"], ["0", "r3", "No limit", "Show me the best"]] }
 ];
@@ -463,6 +467,13 @@ drawQuiz();
 
 loadProducts().then((all) => {
   ALL = all;
+  // order again: last bag, still in stock
+  const last = store.get("cv_last", []).filter((l) => byId.has(l.id));
+  if (last.length) {
+    $("#again").innerHTML = `<div class="again rv in"><div><span class="tag">Welcome back</span><h3>Your last order</h3></div><div class="again-th">${last.slice(0, 5).map((l) => l.t ? `<img src="${esc(l.t)}" alt="${esc(l.n)}" title="${esc(l.n)}${l.opt ? " · " + esc(l.opt) : ""}">` : "").join("")}</div><button class="btn btn-red btn-sm" id="again-go">${I.bag} Add it all again</button></div>`;
+    $("#again").hidden = false;
+    $("#again-go").onclick = () => { last.forEach((l) => addToCart(l, l.q, l.opt, l.req, l.ol, l.vid)); openDrawer("cart"); };
+  }
   const brandCounts = {};
   all.forEach((p) => p.b && (brandCounts[p.b] = (brandCounts[p.b] || 0) + 1));
   $("#cats").innerHTML = TILES.map(([name, q, fn]) => {

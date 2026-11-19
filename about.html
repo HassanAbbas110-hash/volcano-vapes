@@ -8,6 +8,8 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/icon-512.png">
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
@@ -99,8 +101,8 @@ loadProducts().then((all) => {
     [n((p) => p.s === "Nic Salts" || p.s === "E Liquids"), "juices & nic salts", "shop.html?c=vape"],
     [n((p) => p.s === "Devices"), "pod kits & devices", "shop.html?s=Devices"],
     [n((p) => p.s === "Coils, Pods & Tanks"), "coils, pods & tanks", "shop.html?s=Coils%2C+Pods+%26+Tanks"],
-    [n((p) => p.s === "MTL"), "MTL kits & juices", "shop.html?s=MTL"],
-    [n((p) => p.c === "snus"), "pouches & snus", "shop.html?c=snus"]
+    [n((p) => p.s === "Prefilled Pods"), "prefilled pods", "shop.html?s=Prefilled+Pods"],
+    [n((p) => p.c === "snus"), "pouches & snuff", "shop.html?c=snus"]
   ].map(([v, l, h]) => `<a href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
 });
 </script>

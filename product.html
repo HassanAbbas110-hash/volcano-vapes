@@ -7,6 +7,8 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/icon-512.png">
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
@@ -96,10 +98,10 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
       <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">${priceHtml(p)}<span class="stock"><i></i>In stock</span></div>
       <div class="specs">${Object.entries(specs).map(([k, v]) => { const parts = v.split(", ");
         return parts.length > 1 ? `<div class="multi"><small>${esc(k)} · ${parts.length} options</small><span class="opts">${parts.map((x) => `<i>${esc(x)}</i>`).join("")}</span></div>` : `<div><small>${esc(k)}</small>${esc(v)}</div>`; }).join("")}</div>
-      ${p.var ? `<p class="note">This comes in a few options (flavour or strength). Add it to your bag and tell us which one in the note, or ask us on WhatsApp.</p>` : ""}
+      ${det.v && det.v.length ? `<div class="vpick"><small>Choose your ${esc((det.o || "option").toLowerCase())} · ${det.v.length} in stock</small><div class="vopts">${det.v.map(([vid, t, pr], i) => `<button data-vi="${i}" aria-pressed="false">${esc(t)}${pr !== p.p ? ` <em>${R(pr)}</em>` : ""}</button>`).join("")}</div></div>` : ""}
       ${p.p ? `<div class="buy">
         <span class="qty"><button id="qm" aria-label="One less">−</button><label class="sr" for="qn">Quantity</label><input id="qn" type="number" min="1" max="50" value="1" inputmode="numeric"><button id="qp" aria-label="One more">+</button></span>
-        <button class="btn btn-red" data-add="${p.id}" data-qty="#qn">${I.bag} Add to bag</button>
+        <button class="btn btn-red" id="addv">${I.bag} Add to bag</button>
         <button class="favbig${fav ? " on" : ""}" data-fav="${p.id}" aria-pressed="${fav}" aria-label="Save to favourites">${I.heart}</button></div>` : ""}
       <div class="alt">
         ${p.p && CONFIG.onlineStore ? `<a class="btn btn-line" id="buynow" href="${buyOnlineUrl(p)}" target="_blank" rel="noopener">Buy now with online checkout ${I.out}</a>` : ""}
@@ -107,7 +109,7 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
       </div>
       <div class="box">
         <div>${I.pin}<span><b>Collect from any of our 8 stores.</b> Order it here and pick it up once we've confirmed on WhatsApp.</span></div>
-        <div>${I.truck}<span><b>Courier anywhere in South Africa.</b> We'll confirm the cost and the delivery time before you pay.</span></div>
+        <div>${I.truck}<span><b>Courier anywhere in South Africa.</b> Usually 2 to 3 working days, free on orders over R1,500.</span></div>
         ${CONFIG.partnerName ? "" : "<!--"}<div>${I.out}<span><b>Near Primrose, Germiston?</b> Get it tonight through <a class="link" href="${waveLink()}" target="_blank" rel="noopener">7Waves</a>, at shop prices.</span></div>${CONFIG.partnerName ? "" : "-->"}
         <div>${I.clock}<span><b>18+ only.</b> We check ID on collection and on delivery.</span></div>
       </div>
@@ -121,7 +123,24 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
     $("#qp").onclick = () => { qn.value = Math.min(50, +qn.value + 1); syncBuy(); };
     qn.oninput = syncBuy;
   }
-  function syncBuy() { const b = $("#buynow"); if (b) b.href = buyOnlineUrl(p, Math.max(1, +qn.value || 1)); }
+  // chosen option (flavour, colour, strength) drives the price, the bag line and the checkout link
+  let pick = det.v && det.v.length ? null : { vid: p.vid, t: "", pr: p.p };
+  function syncBuy() {
+    const b = $("#buynow"); if (!b) return;
+    b.classList.toggle("off", !pick); b.href = pick ? buyOnlineUrl(p, Math.max(1, +qn.value || 1), pick.vid) : "#";
+  }
+  $$(".vopts button").forEach((b) => (b.onclick = () => {
+    const [vid, t, pr] = det.v[+b.dataset.vi]; pick = { vid, t, pr };
+    $$(".vopts button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    $(".info .price").outerHTML = priceHtml({ ...p, p: pr, var: false }); syncBuy();
+  }));
+  const needPick = () => { toast(`Choose your ${(det.o || "option").toLowerCase()} first`); $(".vpick")?.scrollIntoView({ block: "center", behavior: "smooth" }); $(".vpick")?.classList.add("shake"); setTimeout(() => $(".vpick")?.classList.remove("shake"), 500); };
+  $("#addv") && ($("#addv").onclick = () => {
+    if (!pick) return needPick();
+    flyToBag($(".pic > img")); addToCart({ ...p, p: pick.pr }, Math.max(1, +qn.value || 1), pick.t, false, det.o, pick.vid);
+  });
+  $("#buynow") && $("#buynow").addEventListener("click", (e) => { if (!pick) { e.preventDefault(); needPick(); } });
+  syncBuy();
   $("#share").onclick = async () => {
     const data = { title: p.n, text: `${p.n} at Volcano Vapes`, url: location.href };
     try { if (navigator.share) await navigator.share(data); else { await navigator.clipboard.writeText(location.href); toast("Link copied"); } } catch {}

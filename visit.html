@@ -8,6 +8,8 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/icon-512.png">
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
@@ -87,7 +89,7 @@ $$("[data-i]").forEach((el) => { if (el.classList.contains("ic")) el.innerHTML =
 let cur = STORES[0], prov = "All";
 const telHref = (t) => "tel:+27" + t.replace(/\s/g, "").slice(1);
 function showStore(st) {
-  cur = st; const o = openState(st);
+  cur = st; store.set("cv_store", st.id); typeof myStoreChip === "function" && myStoreChip(); const o = openState(st);
   $("#map").src = "https://maps.google.com/maps?q=" + encodeURIComponent("Volcano Vapes " + st.addr) + "&z=15&output=embed";
   $("#pick-store").innerHTML = `
     <div class="row"><div class="ic">${I.pin}</div><div><small>${st.prov}</small><b>Volcano Vapes ${st.name}</b><p>${esc(st.addr)} <button class="copyb" id="copy-addr">Copy</button></p></div></div>
