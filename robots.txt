@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hassanabbas110-hash.github.io/volcano-vapes/sitemap.xml
