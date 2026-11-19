@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About us · Volcano Vapes</title>
+<meta name="description" content="Volcano Vapes is a South African vape retailer and wholesaler, founded in 2022, with eight stores and a distribution centre in Germiston.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/volcano.css">
+<style>
+.story{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.story p{font-size:17px;color:var(--paper-mute);max-width:56ch}
+.story p+p{margin-top:16px}
+.story p b{color:var(--paper-ink)}
+.story figure img{border-radius:16px;width:100%}
+.story figcaption{font-size:13px;color:var(--paper-mute);margin-top:8px}
+.stock{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.stock a{padding:22px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .2s}
+.stock a:hover{background:var(--panel)}
+.stock b{display:block;font-family:var(--head);font-size:46px;line-height:1;font-variant-numeric:tabular-nums}
+.stock span{color:var(--mute);font-size:14px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.rules h3{font-size:24px;text-transform:uppercase;margin-bottom:8px}
+.rules p{color:var(--mute);font-size:15px}
+.gallery{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px}
+.gallery img{border-radius:14px;width:100%;height:100%;object-fit:cover;aspect-ratio:4/5}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+@media (max-width:900px){.story{grid-template-columns:1fr}.stock{grid-template-columns:repeat(2,1fr)}.rules{grid-template-columns:1fr}.gallery{grid-template-columns:1fr 1fr}.gallery img:first-child{grid-column:1/-1;aspect-ratio:1}}
+</style>
+</head>
+<body data-page="about">
+<script src="assets/site.js"></script>
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>About us</span></nav>
+    <header class="phead"><span class="tag">About Volcano</span><h1 style="margin-top:12px">Behind the <span class="script">counter</span></h1>
+      <p>A South African vape retailer and wholesaler, founded in 2022. Eight stores, one warehouse in Germiston, and deliveries to the whole country.</p></header>
+  </div>
+
+  <section class="sec paper" style="margin-top:48px">
+    <div class="wrap story">
+      <div>
+        <span class="tag">Who we are</span>
+        <h2 style="margin:12px 0 22px">Started in <span class="script">2022</span></h2>
+        <p>Volcano Vapes started in 2022. Today we run <b>eight stores</b>: two in Potchefstroom, and one each in Germiston, Pretoria, Delmas, Klerksdorp, Ballito and Gqeberha.</p>
+        <p>Everything ships from our distribution centre in Germiston, which also supplies other shops: vape shops, convenience stores, garages and tuck shops.</p>
+        <p>Our rule is simple: <b>100% genuine, no clones</b>. If you're not sure what to get, message us on WhatsApp and a real person will help.</p>
+        <div class="cta"><a class="btn btn-red" href="shop.html">See what's in stock</a><a class="btn btn-line" href="visit.html">Find a store</a></div>
+      </div>
+      <figure><img src="assets/img/shopfront.webp" alt="A row of colourful disposable vapes" width="600" height="583" loading="lazy"><figcaption>Head office: 17 Theodore Street, Delville, Germiston.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">On the shelf today</span><h2>What we <span class="script">stock</span></h2></div><p>Live counts from our stock list. Tap any of them to browse.</p></div>
+      <div class="stock" id="stock"></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">How we work</span><h2>House <span class="script">rules</span></h2></div></div>
+      <div class="rules">
+        <div class="rv"><h3>Strictly 18+</h3><p>We sell nicotine, so we ask for ID in the shop, on collection and on delivery. No exceptions, even if we know you.</p></div>
+        <div class="rv"><h3>No clones</h3><p>Every device and juice is the real thing, from the brands themselves. That matters for your health and your wallet.</p></div>
+        <div class="rv"><h3>Ask before you buy</h3><p>Not sure a pod fits your device, or what nicotine strength to start on? Send us a photo or a question on WhatsApp first.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="gallery" style="margin-bottom:64px">
+        <img src="assets/img/disposables.webp" alt="Nasty disposable vapes" width="600" height="795" loading="lazy">
+        <img src="assets/img/eliquids.webp" alt="A bottle of nic salt e-liquid" width="600" height="685" loading="lazy">
+        <img src="assets/img/interior.webp" alt="A Peach Ice disposable with fresh fruit" width="600" height="337" loading="lazy">
+      </div>
+      <div class="whole rv" id="wholesale" style="margin-bottom:64px"><div><span class="tag">Wholesale</span><h2>Buying for a shop?</h2><p>We supply vape shops, convenience stores, garages and tuck shops from Germiston.</p></div>
+        <div class="cta"><a class="btn btn-black" href="mailto:sales@volcanovapes.co.za?subject=Wholesale%20enquiry">sales@volcanovapes.co.za</a><a class="btn btn-line" href="tel:+27724259588">Call 072 425 9588</a></div></div>
+      <div data-community></div>
+    </div>
+  </section>
+</main>
+<script>
+loadProducts().then((all) => {
+  const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
+  const n = (fn) => fmt(all.filter(fn).length);
+  const brands = new Set(all.map((p) => p.b).filter(Boolean)).size;
+  $("#stock").innerHTML = [
+    [n(() => true), "products in stock", "shop.html"],
+    [brands, "brands", "shop.html"],
+    [n((p) => p.s === "Disposables"), "disposables", "shop.html?s=Disposables"],
+    [n((p) => p.s === "Nic Salts" || p.s === "E Liquids"), "juices & nic salts", "shop.html?c=vape"],
+    [n((p) => p.s === "Devices"), "pod kits & devices", "shop.html?s=Devices"],
+    [n((p) => p.s === "Coils, Pods & Tanks"), "coils, pods & tanks", "shop.html?s=Coils%2C+Pods+%26+Tanks"],
+    [n((p) => p.s === "MTL"), "MTL kits & juices", "shop.html?s=MTL"],
+    [n((p) => p.c === "snus"), "pouches & snus", "shop.html?c=snus"]
+  ].map(([v, l, h]) => `<a href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
+});
+</script>
+</body>
+</html>

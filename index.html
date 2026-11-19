@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Volcano Vapes · Genuine Vapes, 8 Stores, Delivery Across SA</title>
+<meta name="description" content="Volcano Vapes: genuine disposables, pod kits, nic salts and e-liquids. Eight stores in Gauteng, North West, Mpumalanga, KZN and the Eastern Cape, and free delivery across South Africa on orders over R1,500.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/yellowtail-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/volcano.css">
+<style>
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cat{position:relative;overflow:hidden;border-radius:20px;background:var(--panel);border:1px solid var(--line);padding:20px;min-height:250px;display:flex;flex-direction:column;justify-content:flex-end;transition:border-color .3s,transform .2s;transform-style:preserve-3d}
+.cat::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(255,90,31,.22),transparent 62%);opacity:.6;transition:opacity .3s}
+.cat:hover{border-color:var(--orange)}
+.cat:hover::before{opacity:1}
+.cat .im{position:absolute;left:50%;top:22px;width:58%;aspect-ratio:1;translate:-50% 0;border-radius:50%;background:#fff;overflow:hidden;box-shadow:0 20px 40px -10px rgba(0,0,0,.7);transition:transform .5s var(--ease)}
+.cat:hover .im{transform:scale(1.07) rotate(-4deg)}
+.cat .im img{width:100%;height:100%;object-fit:contain;padding:14%}
+.cat h3{position:relative;font-size:26px;text-transform:uppercase;line-height:.95}
+.cat span{position:relative;font-size:13px;color:var(--mute)}
+.cat .arr{position:absolute;right:16px;bottom:18px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:all .3s var(--ease)}
+.cat .arr svg{width:15px;height:15px}
+.cat:hover .arr{background:var(--orange);border-color:var(--orange);transform:rotate(-45deg)}
+
+.finder{position:relative;overflow:hidden;border-radius:30px;padding:clamp(24px,4.5vw,60px);background:linear-gradient(140deg,#2a0f08 0%,#141114 55%,#0e0d10);border:1px solid #42200f;display:grid;grid-template-columns:.8fr 1.2fr;gap:48px}
+.finder::after{content:"";position:absolute;width:520px;height:520px;right:-180px;top:-200px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,90,31,.32),transparent);pointer-events:none}
+.finder>*{position:relative;z-index:1}
+.finder h2{font-size:clamp(46px,6vw,78px);line-height:.9;margin:12px 0 16px}
+.finder .side p{color:var(--mute);max-width:360px}
+.picked{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
+.picked span{font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.prog{display:flex;gap:6px;margin-bottom:22px}
+.prog i{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s}
+.prog i.on{background:var(--orange)}
+.stepq{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:16px}
+.stepq p{font-family:var(--head);font-size:30px;font-weight:700;text-transform:uppercase;line-height:1}
+.stepq small{color:var(--dim);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.choice{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center;text-align:left;padding:16px;border-radius:18px;background:rgba(0,0,0,.28);border:1.5px solid var(--line);transition:border-color .2s,background .2s,transform .25s var(--ease)}
+.choice:hover{border-color:var(--orange);background:rgba(255,90,31,.1);transform:translateY(-3px)}
+.choice .gi{grid-row:span 2;width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,.06);display:grid;place-items:center;color:var(--orange)}
+.choice .gi svg{width:28px;height:28px}
+.choice b{font-size:16px}
+.choice small{color:var(--mute);font-size:13px}
+.anim{animation:qin .45s var(--ease)}
+@keyframes qin{from{opacity:0;transform:translateX(26px)}}
+.fres{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fres .card .nm{font-size:13px}
+.fres .price{font-size:21px}
+.fres .card .bd{padding:10px}
+.ffoot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.back{font-size:13.5px;color:var(--mute);text-decoration:underline;margin-top:14px}
+
+.fitbanner{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;gap:18px 30px;align-items:center;padding:clamp(22px,4vw,40px);border-radius:26px;background:linear-gradient(120deg,#16110f,#1b1414 50%,#2a120a);border:1px solid #3a241a;transition:border-color .3s}
+.fitbanner:hover{border-color:var(--orange)}
+.fitbanner h2{font-size:clamp(36px,5vw,60px);margin:8px 0 10px}
+.fitbanner p{color:var(--mute);max-width:520px}
+.fitbanner .btn{grid-column:2;grid-row:1}
+.fitchips{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.fitchips span{padding:9px 14px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--mute);background:rgba(0,0,0,.25)}
+@media (max-width:700px){.fitbanner{grid-template-columns:1fr}.fitbanner .btn{grid-column:1;grid-row:auto;justify-self:start}}
+.brands{display:flex;flex-wrap:wrap;gap:10px}
+.brand{display:inline-flex;align-items:baseline;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid var(--line);font-family:var(--head);font-size:22px;font-weight:700;text-transform:uppercase;transition:all .2s}
+.brand small{font-family:var(--body);font-size:12px;color:var(--dim);font-weight:600}
+.brand:hover{background:#fff;color:#111;border-color:#fff}
+.dopts.four{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1100px){.dopts.four{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:1000px){.finder{grid-template-columns:1fr}.cats{grid-template-columns:repeat(2,1fr)}.fres{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.dopts.four{grid-template-columns:1fr}.cat{min-height:210px;padding:14px}.cat h3{font-size:21px}.cat .arr{display:none}.choices{grid-template-columns:1fr}.stepq p{font-size:25px}}
+</style>
+</head>
+<body data-page="home">
+<script src="assets/site.js"></script>
+<main id="main">
+
+<section class="vhero intro">
+  <canvas id="lava" aria-hidden="true"></canvas>
+  <div class="crater" aria-hidden="true"></div>
+  <div class="wrap vhero-in">
+    <div>
+      <span class="livechip fade"><i class="dot" id="live-dot"></i><span id="live-txt">8 stores across South Africa</span></span>
+      <h1><span class="w"><span>Genuine</span></span> <span class="w"><span>vapes.</span></span> <span class="l2"><span class="w"><span class="lava-txt">No</span></span> <span class="w"><span class="lava-txt">clones.</span></span></span></h1>
+      <p class="lead fade d1">Disposables, pod kits, nic salts and e-liquids from <b>eight Volcano Vapes stores</b> in five provinces, and delivered anywhere in South Africa. <b>Free delivery on orders over R1,500.</b></p>
+      <div class="ctas fade d2">
+        <a class="btn btn-red" href="shop.html">Shop now <span data-i="arrow"></span></a>
+        <a class="btn btn-line" href="#stores">Find your nearest store</a>
+      </div>
+      <div class="vfacts fade d3">
+        <div><b>8</b>stores</div>
+        <div><b>5</b>provinces</div>
+        <div><b>2022</b>since</div>
+        <div><b>R1,500</b>free delivery from</div>
+      </div>
+    </div>
+    <div class="mountain" aria-hidden="true">
+      <div class="glow"></div>
+      <div class="orbit">
+        <span style="--a:0deg"><img src="assets/img/orbit-0.webp" alt="" width="200" height="200"></span>
+        <span style="--a:60deg"><img src="assets/img/orbit-1.webp" alt="" width="200" height="200"></span>
+        <span style="--a:120deg"><img src="assets/img/orbit-2.webp" alt="" width="200" height="200"></span>
+        <span style="--a:180deg"><img src="assets/img/orbit-3.webp" alt="" width="200" height="200"></span>
+        <span style="--a:240deg"><img src="assets/img/orbit-4.webp" alt="" width="200" height="200"></span>
+        <span style="--a:300deg"><img src="assets/img/orbit-5.webp" alt="" width="200" height="200"></span>
+      </div>
+      <img class="logo-big" src="assets/img/logo.webp" alt="" width="420" height="194" fetchpriority="high">
+    </div>
+  </div>
+  <span class="scrollcue" aria-hidden="true"></span>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="mq" id="ticker"></div></div>
+
+<section class="sec" id="stores">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">Live store finder</span><h2>Who's open <span class="script">right now?</span></h2></div><p>Opening times update live, in South African time. Tap "Near me" to sort by distance. Your location stays on your phone.</p></div>
+    <div class="sf-bar" id="sf-bar"></div>
+    <div class="stores" id="store-grid"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">Start here</span><h2>Pick your <span class="script">poison</span></h2></div><p>Browse by type. Every product is genuine stock from the brands themselves.</p></div>
+    <div class="cats" id="cats"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">Fresh stock</span><h2>Just <span class="script">landed</span></h2></div><a class="btn btn-line btn-sm" href="shop.html?new=1">See all new arrivals</a></div>
+    <div class="rail" id="new"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" data-f="partner">
+  <div class="wrap">
+    <div class="waves7 rv">
+      <div>
+        <span class="tag">New · Primrose, Germiston · with 7Waves</span>
+        <h2>Your flavour.<br>Your door.<br><em>Tonight.</em></h2>
+        <p>Our Germiston store in Primrose is teaming up with <b>7Waves</b>, a delivery service built only for vape shops. Order until the store closes and a 7Waves rider brings it from our counter, usually in 30 to 40 minutes. Launching end of November 2026 in Germiston and the East Rand.</p>
+        <div class="w7stats">
+          <div><b>~35</b>min typical delivery</div>
+          <div><b>18+</b>ID + code at the door</div>
+          <div><b>20:00</b>order until close</div>
+        </div>
+        <div class="ctas"><a class="btn btn-wave" id="wave-cta" target="_blank" rel="noopener">Open 7Waves <span data-i="out"></span></a><a class="btn btn-line" href="help.html#waves">How it works</a></div>
+      </div>
+      <div class="phone7" aria-hidden="true">
+        <svg class="map" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="360" fill="#16171a"/>
+          <g stroke="#24262b" stroke-width="10" fill="none" stroke-linecap="round"><path d="M-10 80 L320 120"/><path d="M60 -10 L90 380"/><path d="M-10 250 L320 210"/><path d="M220 -10 L200 380"/></g>
+          <g stroke="#2e3036" stroke-width="4" fill="none"><path d="M-10 170 L320 160"/><path d="M150 -10 L140 380"/><path d="M-10 320 L320 300"/></g>
+          <path id="route7" class="route" d="M70 290 C 90 240, 120 230, 142 190 S 190 150, 210 110 S 240 70, 250 60"/>
+          <circle cx="70" cy="290" r="11" fill="#e3141b"/><text x="70" y="294" font-size="11" text-anchor="middle" fill="#fff" font-family="Inter">V</text>
+          <circle cx="250" cy="60" r="11" fill="#c8f31d"/>
+          <circle id="rider7" r="8" cx="70" cy="290" fill="#fff" stroke="#c8f31d" stroke-width="3"/>
+        </svg>
+        <div class="sheet">
+          <small>RIDER ON THE WAY · SAMPLE ORDER</small>
+          <div class="eta"><span id="eta7">35</span> min</div>
+          <div class="steps7" id="steps7"><i data-l="Paid"></i><i data-l="Accepted"></i><i data-l="Packed"></i><i data-l="On the way"></i><i data-l="Delivered"></i></div>
+          <div class="code7"><span>Your delivery code</span><b>4821</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" id="finder">
+  <div class="wrap">
+    <div class="finder ring rv">
+      <div class="side">
+        <span class="tag">30-second quiz</span>
+        <h2>Vape <span class="script">finder</span></h2>
+        <p>Three taps and we'll pull your best matches from what's in stock today.</p>
+        <div class="picked" id="picked"></div>
+      </div>
+      <div id="quiz" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" id="lab">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">The Volcano lab</span><h2>Do the <span class="script">maths</span></h2></div><p>Two quick tools for questions we hear at the counter.</p></div>
+    <div class="lab">
+      <div class="tool rv">
+        <span class="tag">Nic shot mixer</span>
+        <h3>What strength will I get?</h3>
+        <p>Adding nic shots to a longfill? Slide in your juice and shots to see the final strength.</p>
+        <div class="grid2">
+          <div>
+            <div class="rng"><label for="mx-juice">Juice in the bottle <output id="o-juice"></output></label><input type="range" id="mx-juice" min="10" max="120" step="10" value="50"></div>
+            <div class="rng"><label for="mx-shots">10ml nic shots <output id="o-shots"></output></label><input type="range" id="mx-shots" min="0" max="6" step="1" value="1"></div>
+            <div class="rng"><label for="mx-str">Shot strength <output id="o-str"></output></label><input type="range" id="mx-str" min="3" max="50" step="1" value="18"></div>
+          </div>
+          <div class="bottle" id="bottle"><div class="cap"></div><div class="body"><div class="liq"></div><div class="mg" id="o-mg"></div></div></div>
+        </div>
+        <div class="res" id="mx-res"></div>
+        <p class="fine">Check the strength printed on your nic shot. Keep nicotine away from children and pets.</p>
+      </div>
+      <div class="tool rv">
+        <span class="tag">Disposable burn rate</span>
+        <h3>How long will it last?</h3>
+        <p>Puff counts are big numbers. Here's what they mean for how you vape.</p>
+        <div style="margin-top:22px">
+          <div class="rng"><label for="bn-puffs">Puffs on the box <output id="o-puffs"></output></label><input type="range" id="bn-puffs" min="600" max="40000" step="200" value="15000"></div>
+          <div class="rng"><label for="bn-day">Your puffs a day <output id="o-day"></output></label><input type="range" id="bn-day" min="50" max="800" step="10" value="250"></div>
+          <div class="rng"><label for="bn-price">Price <output id="o-price"></output></label><input type="range" id="bn-price" min="50" max="600" step="10" value="250"></div>
+        </div>
+        <div class="puffbar"><i id="bn-bar"></i></div>
+        <div class="burn"><div><b id="r-days">0</b>days</div><div><b id="r-day">R0</b>a day</div><div><b id="r-month">R0</b>a month</div></div>
+        <p class="fine">Rough guide. Real puffs depend on how long you draw and the device's power setting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <a class="fitbanner rv" href="fit.html">
+      <div><span class="tag">Coil &amp; Pod Finder</span><h2>What fits my <span class="script">device?</span></h2>
+        <p>Pick your device and see every coil, pod and tank that fits. Order in one tap.</p></div>
+      <div class="fitchips" id="fitchips"></div>
+      <span class="btn btn-red">Find my coils <span data-i="arrow"></span></span>
+    </a>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">Your way</span><h2>Get it <span class="script">your way</span></h2></div><p>Walk in, collect, or have it delivered.</p></div>
+    <div class="dopts four">
+      <div class="dopt rv"><span class="pill">Free</span><div class="ic" data-ic="pin"></div><h3>Collect</h3><p>Order here and pick it up at any of our 8 stores. Bring your ID.</p></div>
+      <div class="dopt rv"><span class="pill">Nationwide</span><div class="ic" data-ic="truck"></div><h3>Courier</h3><p>Anywhere in South Africa in 2 to 3 working days. Free on orders over R1,500.</p></div>
+      <div class="dopt rv"><span class="pill">Same day</span><div class="ic" data-ic="clock"></div><h3>Same-day</h3><p>In selected areas near our stores. Ask us on WhatsApp if your area qualifies.</p></div>
+      <a class="dopt wv rv" data-f="partner" id="wave-card" target="_blank" rel="noopener"><span class="pill">Primrose · tonight</span><div class="ic" data-ic="out"></div><h3>7Waves</h3><p>Fast local delivery from our Germiston store, at shop prices. ID checked at your door.</p></a>
+    </div>
+    <p class="muted" style="text-align:center;margin:34px 0 14px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-weight:700">Secure payment with Bob Pay · or pay in 4 with Payflex</p>
+    <div class="pay"><span class="hi">Visa</span><span class="hi">Mastercard</span><span>Amex</span><span>Instant EFT</span><span>Capitec Pay</span><span>Scan to Pay</span><span>Absa Pay</span><span>Apple Pay</span><span>Google Pay</span><span>Payflex</span></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">Names you know</span><h2>Shop by <span class="script">brand</span></h2></div><p>Only the real thing, straight from the brands.</p></div>
+    <div class="brands" id="brands"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" id="wholesale">
+  <div class="wrap">
+    <div class="whole rv">
+      <div>
+        <span class="tag">Wholesale</span>
+        <h2>Run a shop? Stock up with us.</h2>
+        <p>Volcano Vapes is a wholesaler too. We supply other retailers from our distribution centre in Germiston.</p>
+        <ul><li>Vape shops</li><li>Convenience stores</li><li>Garages</li><li>Tuck shops</li></ul>
+      </div>
+      <div class="cta">
+        <a class="btn btn-black" href="mailto:sales@volcanovapes.co.za?subject=Wholesale%20enquiry">sales@volcanovapes.co.za</a>
+        <a class="btn btn-line" href="tel:+27724259588">Call 072 425 9588</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="tag">The Volcano crew</span><h2>Join the <span class="script">eruption</span></h2></div><p>Follow along for drops and specials. If you've been into one of our stores, a quick review helps a lot.</p></div>
+    <div data-community></div>
+  </div>
+</section>
+
+</main>
+<script>
+$$("[data-i]").forEach((el) => (el.outerHTML = I[el.dataset.i]));
+$$("[data-ic]").forEach((el) => (el.innerHTML = I[el.dataset.ic]));
+$("#fitchips").innerHTML = ["XROS", "XLIM", "Nord 5", "Caliburn G2", "Drag X PnP", "Argus", "Aegis Boost", "Vinci 3"].map((d) => `<span>${d}</span>`).join("") + "<span>+57 more</span>";
+document.addEventListener("DOMContentLoaded", () => { const w = $("#wave-card"); if (w) w.href = waveLink(); const c = $("#wave-cta"); if (c) c.href = waveLink(); });
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
+
+/* brand ticker: brands on the Volcano Vapes menu */
+$("#ticker").innerHTML = ["Nasty", "Elfbar", "Vaporesso", "OXVA", "Geekvape", "VOOPOO", "BLVK", "VOZOL", "SMOK", "Airscream", "Bewolk", "Vapengin", "PopHit", "6 Zero", "ZYN", "KLINT"].map((b) => `<span>${b}</span>`).join("").repeat(2);
+
+/* ---------- lava canvas: embers rising from the crater ---------- */
+(function lava() {
+  const cv = $("#lava"), cx = cv.getContext("2d"); if (!cx) return;
+  let W, H, parts = [], run = true, mouse = { x: -999, y: -999 };
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const size = () => { W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+  const spawn = (y) => ({ x: W * (.15 + Math.random() * .7), y: y ?? H + 10, r: .6 + Math.random() * 1.8, vy: .35 + Math.random() * 1.1, vx: (Math.random() - .5) * .4, life: 0, max: 280 + Math.random() * 380, hue: 10 + Math.random() * 35 });
+  size(); addEventListener("resize", size);
+  const N = innerWidth < 700 ? 28 : 60;
+  for (let i = 0; i < N; i++) { const p = spawn(Math.random() * H); p.life = Math.random() * p.max; parts.push(p); }
+  cv.parentElement.addEventListener("pointermove", (e) => { const r = cv.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; }, { passive: true });
+  function draw() {
+    cx.clearRect(0, 0, W, H); cx.globalCompositeOperation = "lighter";
+    for (const p of parts) {
+      const a = Math.sin(Math.PI * p.life / p.max);
+      const g = cx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      g.addColorStop(0, `hsla(${p.hue},100%,62%,${a * .75})`); g.addColorStop(1, `hsla(${p.hue},100%,50%,0)`);
+      cx.fillStyle = g; cx.beginPath(); cx.arc(p.x, p.y, p.r * 4, 0, 7); cx.fill();
+    }
+  }
+  function tick() {
+    if (!run) return;
+    for (const p of parts) {
+      const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+      if (d2 < 12000) { p.vx += dx / 4000; p.vy -= dy / 8000; } // embers swirl away from the cursor
+      p.x += p.vx + Math.sin((p.life + p.hue) / 40) * .3; p.y -= p.vy; p.life++;
+      if (p.life > p.max || p.y < -20) Object.assign(p, spawn());
+    }
+    draw(); requestAnimationFrame(tick);
+  }
+  if (reduced) return draw();
+  // pause when the hero is off screen
+  new IntersectionObserver(([e]) => { const was = run; run = e.isIntersecting; if (run && !was) requestAnimationFrame(tick); }).observe(cv);
+  requestAnimationFrame(tick);
+})();
+
+/* ---------- live store finder ---------- */
+const PROVS = ["All", ...new Set(STORES.map((s) => s.prov))];
+let prov = "All", here = null;
+function drawStores() {
+  const now = saNow(), openN = STORES.filter((s) => openState(s, now).open).length;
+  $("#live-txt").textContent = `${openN} of ${STORES.length} stores open right now`;
+  $("#live-dot").classList.toggle("off", !openN);
+  let list = STORES.filter((s) => prov === "All" || s.prov === prov);
+  if (here) list = list.map((s) => ({ ...s, km: kmBetween(here, s.ll) })).sort((a, b) => a.km - b.km);
+  $("#store-grid").innerHTML = list.map((s, i) => {
+    const o = openState(s, now);
+    return `<article class="st${here && i === 0 ? " near" : ""}">
+      ${s.km != null ? `<span class="km">~${Math.round(s.km)} km</span>` : ""}
+      <span class="prov">${s.prov}</span>
+      <h3>${s.name}<small>${s.area}</small></h3>
+      <span class="status"><i class="dot${o.open ? (o.soon ? " soon" : "") : " off"}"></i>${o.open ? "Open · " : "Closed · "}${o.text}</span>
+      <span class="addr">${esc(s.addr)}</span>
+      <span class="hrs">${hoursLines(s).join("<br>")}</span>
+      ${s.waves && CONFIG.partnerName ? `<span class="wv7">7Waves delivery</span>` : ""}
+      <div class="acts"><a class="go" href="${s.map}" target="_blank" rel="noopener">${I.pin} Directions</a><a href="tel:+27${s.tel.replace(/\s/g, "").slice(1)}">${I.phone} ${s.tel}</a></div>
+    </article>`;
+  }).join("");
+}
+$("#sf-bar").innerHTML = PROVS.map((p) => `<button class="chip" data-prov="${p}" aria-pressed="${p === prov}">${p}</button>`).join("") + `<button class="chip loc" id="nearme">${I.pin}<span>Near me</span></button>`;
+$("#sf-bar").onclick = (e) => {
+  const b = e.target.closest("[data-prov]");
+  if (b) { prov = b.dataset.prov; $$("#sf-bar [data-prov]").forEach((x) => x.setAttribute("aria-pressed", x === b)); drawStores(); return; }
+  if (e.target.closest("#nearme")) {
+    const lbl = $("#nearme span");
+    if (!navigator.geolocation) return toast("Your browser can't share a location");
+    lbl.textContent = "Finding you…";
+    navigator.geolocation.getCurrentPosition((pos) => { here = [pos.coords.latitude, pos.coords.longitude]; lbl.textContent = "Sorted by distance"; drawStores(); },
+      () => { lbl.textContent = "Near me"; toast("No location, no problem. Pick your province instead."); }, { timeout: 8000 });
+  }
+};
+drawStores(); setInterval(drawStores, 60000);
+
+/* ---------- 7Waves phone: a sample order plays through ---------- */
+(function waves() {
+  const path = $("#route7"), dot = $("#rider7"); if (!path) return;
+  const L = path.getTotalLength(), steps = $$("#steps7 i"), t0 = performance.now();
+  const frame = (k) => {
+    const onWay = Math.min(1, Math.max(0, (k - .35) / .55)), p = path.getPointAtLength(onWay * L);
+    dot.setAttribute("cx", p.x); dot.setAttribute("cy", p.y);
+    const stage = k < .1 ? 1 : k < .22 ? 2 : k < .35 ? 3 : k < .92 ? 4 : 5;
+    steps.forEach((s, i) => s.classList.toggle("on", i < stage));
+    $("#eta7").textContent = stage < 4 ? 35 : stage === 5 ? 0 : Math.max(1, Math.round(30 * (1 - onWay)));
+  };
+  if (reduced) return frame(.6);
+  const loop = (t) => { frame(((t - t0) % 9000) / 9000); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+})();
+
+/* ---------- lab tools ---------- */
+const fillRange = (el) => el.style.setProperty("--p", ((el.value - el.min) / (el.max - el.min) * 100) + "%");
+// final strength = nicotine from the shots spread over the whole bottle
+const mixMg = (juice, shots, str) => (juice + shots * 10) ? shots * 10 * str / (juice + shots * 10) : 0;
+console.assert(mixMg(50, 1, 18) === 3 && mixMg(100, 2, 18) === 3 && mixMg(0, 0, 18) === 0, "nic mixer maths");
+function mixer() {
+  const j = +$("#mx-juice").value, n = +$("#mx-shots").value, s = +$("#mx-str").value, total = j + n * 10, mg = mixMg(j, n, s);
+  $("#o-juice").textContent = j + "ml"; $("#o-shots").textContent = n; $("#o-str").textContent = s + "mg/ml";
+  $("#o-mg").textContent = mg.toFixed(1);
+  const b = $("#bottle"); b.style.setProperty("--fill", Math.min(100, total / 1.4) + "%");
+  b.style.setProperty("--c1", `hsl(${45 - Math.min(mg, 12) * 3},100%,58%)`); b.style.setProperty("--c2", `hsl(${10 - Math.min(mg, 12)},90%,45%)`);
+  $("#mx-res").innerHTML = `<b>${mg.toFixed(1)}mg/ml</b> · ${total}ml in total${mg > 6 ? ". That's strong for a sub-ohm tank." : ""}`;
+}
+function burn() {
+  const pf = +$("#bn-puffs").value, d = +$("#bn-day").value, pr = +$("#bn-price").value, days = pf / d;
+  $("#o-puffs").textContent = fmt(pf); $("#o-day").textContent = d; $("#o-price").textContent = R(pr);
+  $("#r-days").textContent = days < 10 ? days.toFixed(1) : Math.round(days);
+  $("#r-day").textContent = "R" + (pr / days).toFixed(2); $("#r-month").textContent = R(pr / days * 30);
+  $("#bn-bar").style.setProperty("--w", Math.min(100, days / 60 * 100) + "%");
+}
+$$("#lab input[type=range]").forEach((el) => { fillRange(el); el.addEventListener("input", () => { fillRange(el); el.id.startsWith("mx") ? mixer() : burn(); }); });
+mixer(); burn();
+
+/* ---------- categories, new stock, brands, quiz ---------- */
+const TILES = [
+  ["Disposables", "s=Disposables", (p) => p.s === "Disposables"],
+  ["Pod kits", "s=Devices", (p) => p.s === "Devices"],
+  ["Nic salts", "s=Nic+Salts", (p) => p.s === "Nic Salts"],
+  ["E-liquids", "s=E+Liquids", (p) => p.s === "E Liquids"],
+  ["Coils & pods", "s=Coils%2C+Pods+%26+Tanks", (p) => p.s === "Coils, Pods & Tanks"],
+  ["MTL", "s=MTL", (p) => p.s === "MTL"],
+  ["Accessories", "s=Vape+Accessories", (p) => p.s === "Vape Accessories"],
+  ["Pouches & snus", "c=snus", (p) => p.c === "snus"]
+];
+const G = {
+  disp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="7" y="6" width="10" height="16" rx="3"/><path d="M10 6V3h4v3"/><path d="M10 12h4"/></svg>',
+  pod: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 2h6v7H9z"/><rect x="6.5" y="9" width="11" height="13" rx="3"/><circle cx="12" cy="17" r="1.6"/></svg>',
+  bottle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M10 2h4v3h-4z"/><path d="M9 5h6l1 3v12a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V8z"/><path d="M8 12h8"/></svg>',
+  mtl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="8" height="13" rx="2"/><path d="M10 9V5h4v4M11 2h2v3h-2z"/></svg>',
+  ice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10"/><path d="m9 4 3 2 3-2M9 20l3-2 3 2"/></svg>',
+  fruit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="16" r="4"/><circle cx="16.5" cy="17" r="4"/><path d="M7.5 12C9 7 12 4 17 3M16.5 13c-.5-4-2-7-4.5-9"/></svg>',
+  sweet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M7.5 12 3 8.5v7zM16.5 12 21 8.5v7z"/></svg>',
+  tobacco: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21c0-9 5-15 15-17-1 10-7 15-15 17z"/><path d="M5 21 14 11"/></svg>',
+  r1: '<svg viewBox="0 0 24 24"><text x="12" y="16.5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="12" fill="currentColor">R150</text></svg>',
+  r2: '<svg viewBox="0 0 24 24"><text x="12" y="16.5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="12" fill="currentColor">R300</text></svg>',
+  r3: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12c0-3 4-3 6 0s6 3 6 0-4-3-6 0-6 3-6 0z"/></svg>'
+};
+const STEPS = [
+  { k: "kind", q: "What do you use?", o: [["Disposables", "disp", "Disposable", "Grab-and-go, no refills"], ["Nic Salts", "pod", "Pod kit", "Nic salts for pods"], ["E Liquids", "bottle", "Tank / mod", "Bigger clouds, bigger bottles"], ["MTL", "mtl", "Mouth-to-lung", "A tighter draw"]] },
+  { k: "flav", q: "Pick a flavour mood", o: [["ice", "ice", "Icy & minty", "That cold exhale"], ["fruit", "fruit", "Fruity", "Mango, berry, watermelon"], ["sweet", "sweet", "Sweet & dessert", "Candy, custard, soda"], ["tobacco", "tobacco", "Tobacco & classic", "Old-school and smooth"]] },
+  { k: "max", q: "What's the budget?", o: [["150", "r1", "Under R150", "Easy on the pocket"], ["300", "r2", "Under R300", "The sweet spot"], ["0", "r3", "No limit", "Show me the best"]] }
+];
+let ALL = [], ans = {}, step = 0;
+function drawQuiz() {
+  const box = $("#quiz");
+  const prog = `<div class="prog">${[0, 1, 2, 3].map((i) => `<i class="${i <= step ? "on" : ""}"></i>`).join("")}</div>`;
+  $("#picked").innerHTML = STEPS.filter((s) => ans[s.k]).map((s) => `<span>${s.o.find((o) => o[0] === ans[s.k])[2]}</span>`).join("");
+  if (step < STEPS.length) {
+    const s = STEPS[step];
+    box.innerHTML = `${prog}<div class="anim"><div class="stepq"><p>${s.q}</p><small>Step ${step + 1} of 3</small></div>
+      <div class="choices">${s.o.map(([v, g, t, d]) => `<button class="choice" data-v="${v}"><span class="gi">${G[g]}</span><b>${t}</b><small>${d}</small></button>`).join("")}</div>
+      ${step ? '<button class="back" id="qback">Back</button>' : ""}</div>`;
+    $$(".choice", box).forEach((b) => (b.onclick = () => { ans[s.k] = b.dataset.v; step++; drawQuiz(); }));
+    if (step) $("#qback").onclick = () => { step--; delete ans[STEPS[step].k]; drawQuiz(); };
+    return;
+  }
+  const re = FLAVOURS[ans.flav].re, max = +ans.max;
+  const hits = ALL.filter((p) => p.s === ans.kind && re.test(p.n) && p.p && (!max || p.p <= max))
+    .sort((a, b) => (!!b.t - !!a.t) || (b.new - a.new) || (max ? 0 : b.p - a.p));
+  // one pick per brand first, so the four results aren't all the same range
+  const seen = new Set(), top = hits.filter((p) => !seen.has(p.b) && seen.add(p.b)).concat(hits).filter((p, i, a) => a.indexOf(p) === i);
+  hits.splice(0, hits.length, ...top);
+  const link = `shop.html?s=${encodeURIComponent(ans.kind)}&f=${ans.flav}${max ? "&max=" + max : ""}`;
+  box.innerHTML = `${prog}<div class="anim"><div class="stepq"><p>${hits.length ? "Your matches" : "Nothing in stock"}</p><small>${hits.length ? fmt(hits.length) + " in stock" : ""}</small></div>
+    ${hits.length ? `<div class="fres">${hits.slice(0, 4).map(cardHtml).join("")}</div>
+      <div class="ffoot"><button class="btn btn-red btn-sm" data-add="${hits[0].id}">Add top pick to bag</button><a class="btn btn-white btn-sm" href="${link}">See all ${fmt(hits.length)}</a><button class="back" id="qre" style="margin:0">Start again</button></div>`
+    : `<p class="muted">Nothing matches that combo today. Try another budget, or <a class="link" target="_blank" rel="noopener" href="${wa("Hi Volcano, do you have any " + FLAVOURS[ans.flav].label.toLowerCase() + " " + ans.kind.toLowerCase() + "?")}">ask us on WhatsApp</a>.</p><button class="back" id="qre">Start again</button>`}</div>`;
+  $("#qre").onclick = () => { ans = {}; step = 0; drawQuiz(); };
+}
+drawQuiz();
+
+loadProducts().then((all) => {
+  ALL = all;
+  const brandCounts = {};
+  all.forEach((p) => p.b && (brandCounts[p.b] = (brandCounts[p.b] || 0) + 1));
+  $("#cats").innerHTML = TILES.map(([name, q, fn]) => {
+    const list = all.filter(fn), pic = list.find((p) => p.t);
+    return `<a class="cat" href="shop.html?${q}"><div class="im">${pic ? `<img src="${esc(pic.t)}" alt="" loading="lazy" width="150" height="150">` : ""}</div>
+      <h3>${name}</h3><span>${fmt(list.length)} in stock</span><span class="arr">${I.arrow}</span></a>`;
+  }).join("");
+  const fresh = all.filter((p) => p.new && p.t);
+  $("#new").innerHTML = (fresh.length >= 6 ? fresh : all.filter((p) => p.t)).slice(0, 14).map(cardHtml).join("");
+  $("#brands").innerHTML = Object.entries(brandCounts).sort((a, b) => b[1] - a[1]).slice(0, 18)
+    .map(([b, n]) => `<a class="brand" href="shop.html?b=${encodeURIComponent(b)}">${esc(b)}<small>${n}</small></a>`).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "Volcano Vapes",
+  "short": "Volcano",
+  "domain": "volcanovapes.co.za",
+  "email": "info@volcanovapes.co.za",
+  "phone": "+27 61 040 0252",
+  "whatsapp": "27610400252",
+  "street": "74-70 Oak Ave",
+  "centre": "Primrose",
+  "road": "Oak Ave",
+  "town": "Germiston",
+  "postcode": "1401",
+  "province": "Gauteng",
+  "hoursNote": "Mon–Sat 08:00–20:00 · Sun 09:00–18:00",
+  "instagram": "https://www.instagram.com/volcanovapes_south_africa/",
+  "facebook": "https://www.facebook.com/p/Volcano-Vapes-South-Africa-100090631302227/",
+  "partnerName": "7Waves",
+  "partnerUrl": "https://waves-pink-kappa.vercel.app",
+  "onlineStore": "",
+  "accent": "#e3141b",
+  "images": {}
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delivery & help · Volcano Vapes</title>
+<meta name="description" content="How ordering, delivery across South Africa (free over R1,500), collection from 8 stores and payment work at Volcano Vapes, plus answers to common questions.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/volcano.css">
+<style>
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:st}
+.step{counter-increment:st;padding:24px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line)}
+.step::before{content:counter(st);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:22px;margin-bottom:14px}
+.step h3{font-size:23px;text-transform:uppercase;margin-bottom:6px}
+.step p{color:var(--mute);font-size:14.5px}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ways:has(> :nth-child(2):last-child){grid-template-columns:repeat(2,1fr)}
+.way.wv{background:linear-gradient(150deg,#0c2a4a,#0b1726);border-color:#1d4a7a}
+.way.wv h3,.way.wv p,.way.wv ul{color:#d6ecfb}
+.way.wv svg{color:#7dd3fc}
+.way{padding:26px;border-radius:var(--r);border:1px solid var(--paper-line);background:#fff}
+.way h3{font-size:26px;text-transform:uppercase;margin:10px 0 8px;color:var(--paper-ink)}
+.way p{color:var(--paper-mute);font-size:15px}
+.way svg{width:28px;height:28px;color:var(--red)}
+.way ul{margin:12px 0 0 18px;color:var(--paper-mute);font-size:14.5px;display:grid;gap:4px}
+.faq{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
+.qa{border-top:1px solid var(--line)}
+.qa details{border-bottom:1px solid var(--line)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:18px 2px;font-weight:600;font-size:16px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"+";font-family:var(--head);font-size:28px;line-height:.8;color:var(--red-hi);transition:transform .25s}
+.qa details[open] summary::after{transform:rotate(45deg)}
+.qa details p{color:var(--mute);padding:0 2px 18px;max-width:62ch}
+.qa details p a{color:var(--ink)}
+@media (max-width:860px){.steps,.ways,.faq{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="help">
+<script src="assets/site.js"></script>
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>Delivery &amp; help</span></nav>
+    <header class="phead"><span class="tag">Ordering made simple</span><h1 style="margin-top:12px">Delivery &amp; <span class="script">help</span></h1>
+      <p>How ordering works, what delivery and collection look like, and answers to the questions we get asked most.</p></header>
+  </div>
+
+  <section class="sec" style="padding-top:48px">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">How to order</span><h2>Three steps</h2></div></div>
+      <div class="steps">
+        <div class="step"><h3>Fill your bag</h3><p>Browse the <a class="link" href="shop.html">shop</a> and add what you want. Everything listed is in stock.</p></div>
+        <div class="step"><h3>Send it on WhatsApp</h3><p>Open your bag, choose collect or deliver, and tap send. Your order arrives as a message to us.</p></div>
+        <div class="step"><h3>We confirm, you pay</h3><p>We check everything is packed, confirm the total (and delivery cost) and send you payment details. Then it's yours.</p></div>
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="sec paper">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">Getting it to you</span><h2>Ways to get <span class="script">it</span></h2></div></div>
+      <div class="ways">
+        <div class="way"><span data-i="pin"></span><h3>Collect from a store</h3><p>Pick it up at any of our <a class="link" href="visit.html">8 stores</a> once we've told you it's ready.</p>
+          <ul><li>No delivery fee</li><li>Bring your ID</li><li>Choose your store in your bag</li></ul></div>
+        <div class="way"><span data-i="truck"></span><h3>Courier across SA</h3><p>We deliver anywhere in South Africa, usually in 2 to 3 working days. Same-day delivery is possible in selected areas near our stores.</p>
+          <ul><li>Free on orders over R1,500</li><li>ID checked on delivery (18+)</li><li>Updates on WhatsApp until it arrives</li></ul></div>
+        <div class="way wv" data-f="partner" id="waves"><span data-i="out"></span><h3>Tonight with 7Waves</h3><p>Near our Germiston store in Primrose? 7Waves riders deliver from our counter until closing time, usually in 30 to 40 minutes. Launching end of November 2026.</p>
+          <ul><li>Choose "7Waves" in your bag</li><li>Copy your list in one tap</li><li><a class="link" id="wave-help" target="_blank" rel="noopener">Open 7Waves</a> and order</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <div class="wrap faq">
+      <div><span class="tag">FAQs</span><h2 style="margin-top:10px">Good questions</h2><p class="muted" style="margin-top:12px">Can't find your answer? <a class="link" id="faq-wa" target="_blank" rel="noopener">Message us on WhatsApp</a> or call <a class="link" href="tel:+27610400252">+27 61 040 0252</a>.</p></div>
+      <div class="qa">
+        <details open><summary>Do you deliver outside Gauteng?</summary><p>Yes, anywhere in South Africa. Delivery is free on orders over R1,500. Under that, we'll confirm the cost on WhatsApp before you pay.</p></details>
+        <details data-f="partner"><summary>What is 7Waves?</summary><p>7Waves is a delivery service built only for vape shops, starting with our Germiston store in Primrose. You pay shop prices plus a delivery fee that goes to the rider. The rider checks your ID (18+) and a 4-digit delivery code before handing over your order.</p></details>
+        <details><summary>How long does delivery take?</summary><p>Courier orders usually take 2 to 3 working days. Same-day delivery is available in selected areas near our stores. 7Waves orders from Primrose usually arrive in 30 to 40 minutes.</p></details>
+        <details><summary>Can I order online and collect in a store?</summary><p>Yes. Choose "Collect" in your bag and pick your store. We'll let you know on WhatsApp when it's packed and waiting.</p></details>
+        <details><summary>How do I pay?</summary><p>Online payments go through Bob Pay: Visa, Mastercard, American Express, Instant EFT, Capitec Pay, Scan to Pay, Absa Pay, Apple Pay and Google Pay. You can also pay in 4 interest-free instalments with Payflex. Order on WhatsApp and we'll send you a payment link once your order is confirmed.</p></details>
+        <details><summary>Are your products genuine?</summary><p>Yes. 100% genuine, no clones. We buy from the brands and their official distributors.</p></details>
+        <details><summary>Is everything on the website really in stock?</summary><p>The website only lists products that are in stock on our stock list. Things do sell fast, so if something goes before we confirm your order, we'll tell you straight away and suggest something similar.</p></details>
+        <details><summary>Do I need to be 18?</summary><p>Yes. We only sell to adults and check ID in the shop, on collection and on delivery.</p></details>
+        <details open><summary>Which coil or pod fits my device?</summary><p>Use our <a class="link" href="fit.html">Coil &amp; Pod Finder</a>: pick your device and it shows every coil, pod and tank that fits, in stock now. Still not sure? Send us a photo of your device on WhatsApp.</p></details>
+        <details><summary>My device stopped working. What now?</summary><p>Message us with your order details and what's happening, and we'll help you sort it out.</p></details>
+        <details><summary>Do you sell wholesale?</summary><p>Yes. We supply vape shops, convenience stores, garages and tuck shops from Germiston. Email <a class="link" href="mailto:sales@volcanovapes.co.za">sales@volcanovapes.co.za</a> or call 072 425 9588.</p></details>
+        <details><summary>Can you get a product you don't have?</summary><p>Often, yes. Tell us what you're after and we'll check with our suppliers.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+$$("[data-i]").forEach((el) => (el.outerHTML = I[el.dataset.i]));
+$("#faq-wa").href = wa("Hi Volcano, I have a question: ");
+$("#wave-help").href = waveLink();
+</script>
+</body>
+</html>
