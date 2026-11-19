@@ -257,7 +257,7 @@ function chromeTop() {
   document.body.insertAdjacentHTML("afterbegin", `
   <a class="sr" href="#main">Skip to content</a>
   <div class="progress" aria-hidden="true"></div>
-  <div class="strip"><div class="wrap"><span>Free delivery on orders over R1,500</span><span id="mystore"></span><span>100% genuine, no clones · Strictly 18+</span></div></div>
+  <div class="strip"><div class="wrap"><span>Free delivery on orders over R1,500</span><span id="mystore"></span><span>Hot drops every week · Strictly 18+</span></div></div>
   <header class="hdr"><div class="wrap hdr-in">
     <a class="logo" href="index.html" aria-label="Volcano Vapes home"><img src="assets/img/logo-sm.webp" alt="Volcano Vapes" width="180" height="83"></a>
     <nav class="nav" aria-label="Main">${navLinks}</nav>
