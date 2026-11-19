@@ -1,5 +1,5 @@
 // Offline support: pages and stock list network-first (fresh when online), everything else cache-first.
-const CACHE = "volcano-v5";
+const CACHE = "volcano-v6";
 const CORE = ["./", "index.html", "shop.html", "visit.html", "help.html", "about.html", "fit.html", "product.html", "assets/site.css", "assets/volcano.css", "assets/site.js", "assets/fits.js", "assets/img/logo.webp", "assets/img/logo-sm.webp", "assets/img/icon.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

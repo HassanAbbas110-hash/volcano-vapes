@@ -329,7 +329,7 @@ function gate() {
     box.innerHTML = `<img src="assets/img/logo.webp" alt="Volcano Vapes" width="240" height="111"><h2 id="gate-h">Are you 18 or older?</h2>
       <p>We sell nicotine products, so this site is for adults only. We'll check ID when you collect or receive your order.</p>
       <div class="row"><button class="btn btn-red" id="g-yes">Yes, I'm 18 or older</button><button class="btn btn-line" id="g-no">No</button></div>`;
-    $("#g-yes").onclick = () => { store.set("cv_age", "yes"); g.hidden = true; document.body.classList.remove("lock"); };
+    $("#g-yes").onclick = () => { store.set("cv_age", "yes"); g.hidden = true; document.body.classList.remove("lock", "gated"); dispatchEvent(new Event("resize")); };
     $("#g-no").onclick = () => { store.set("cv_age", "no"); refused(); };
     $("#g-yes").focus();
   };
@@ -338,7 +338,7 @@ function gate() {
       <p>You need to be 18 or older to visit this site.</p><button class="btn btn-line btn-sm" id="g-oops">I tapped "No" by mistake</button>`;
     $("#g-oops").onclick = ask;
   };
-  g.hidden = false; document.body.classList.add("lock");
+  g.hidden = false; document.body.classList.add("lock", "gated"); // the page behind the opaque gate isn't drawn until they're in
   answer === "no" ? refused() : ask();
 }
 
@@ -472,12 +472,19 @@ function pointerFx() {
   });
 }
 
+/* off-screen sections pause their CSS animations, so only what you can see costs anything */
+function pauseOffscreen() {
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle("off", !e.isIntersecting)), { rootMargin: "120px 0px" });
+  $$("main > section, main > div, .marquee, .ticker, .ftr, .strip").forEach((el) => { el.classList.add("off"); io.observe(el); });
+}
+
 /* reveal on scroll: content stays visible if this never runs */
 function reveal() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
   document.documentElement.classList.add("rv-on");
   const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px" });
-  $$(".rv,.sec-head").forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); io.observe(el); });
+  $$(".rv,.sec-head").forEach((el) => io.observe(el)); // the first callback marks what's already on screen, no layout reads needed
 }
 
 /* ---------- instant search: results as you type, "/" to focus ---------- */
@@ -539,4 +546,4 @@ if ("serviceWorker" in navigator && location.protocol === "https:") {
 }
 
 chromeTop();
-document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); pointerFx(); $$(".hsearch").forEach(liveSearch); myStoreChip(); setInterval(myStoreChip, 60000); });
+document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); pointerFx(); pauseOffscreen(); $$(".hsearch").forEach(liveSearch); myStoreChip(); setInterval(myStoreChip, 60000); });
